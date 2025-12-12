@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Comissões | Upload</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <style>
+    body {
+      background: #f5f7fb;
+    }
+    .card {
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+    .upload-area {
+      border: 2px dashed #6c63ff;
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      background: #ffffff;
+      cursor: pointer;
+      transition: 0.2s all;
+    }
+    .upload-area:hover {
+      background: #f0f0ff;
+    }
+    .subtitle {
+      color: #666;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card p-4 p-md-5">
+          <h1 class="h3 mb-3 text-center">Upload dos arquivos de comissão</h1>
+          <p class="subtitle text-center mb-4">
+            Coloque todos os 10 arquivos Excel na mesma pasta e selecione a pasta ou todos os arquivos de uma vez.
+          </p>
+
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <div class="alert alert-warning">
+                {% for msg in messages %}
+                  <div>{{ msg }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endwith %}
+
+          <form action="/processar" method="post" enctype="multipart/form-data">
+            <label class="upload-area mb-3">
+              <div class="fw-semibold mb-1">Clique aqui para escolher a pasta/arquivos</div>
+              <div class="subtitle">
+                Arquivos .xlsx com os dados de PJ1, Seguro PJ, Câmbio, Terceiras, XPVP,
+                Crédito, XPCS, Lançamentos Manuais, Times e Repasses, Lançamento de Produtos.
+              </div>
+              <input
+                type="file"
+                name="files"
+                id="files-input"
+                multiple
+                webkitdirectory
+                directory
+                style="display:none"
+              >
+            </label>
+
+            <div id="file-list" class="mb-3 subtitle"></div>
+
+            <button type="submit" class="btn btn-primary w-100">
+              Processar comissões
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('files-input');
+    const area = document.querySelector('.upload-area');
+    const fileList = document.getElementById('file-list');
+
+    area.addEventListener('click', () => input.click());
+
+    input.addEventListener('change', () => {
+      if (!input.files.length) {
+        fileList.textContent = '';
+        return;
+      }
+      const nomes = Array.from(input.files).map(f => f.webkitRelativePath || f.name);
+      fileList.innerHTML = "<strong>Arquivos selecionados:</strong><br>" + nomes.join("<br>");
+    });
+  </script>
+</body>
+</html>

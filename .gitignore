@@ -1,0 +1,16 @@
+# Não enviar credenciais
+.env
+
+# Cache do Python
+__pycache__/
+
+# Pasta de arquivos temporários locais
+outputs/
+
+# Arquivos gerados pelo Python
+*.pyc
+*.pyo
+*.pyd
+
+# Caso você tenha um ambiente virtual
+venv/
