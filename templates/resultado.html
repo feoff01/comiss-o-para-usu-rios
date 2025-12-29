@@ -218,6 +218,17 @@ th { white-space: nowrap; }
   color: #111827;
 }
 
+.chart-box{
+  height: 300px;           /* ajuste como quiser */
+}
+
+.chart-box canvas{
+  width: 100% !important;
+  height: 100% !important; /* força o canvas a respeitar a caixa */
+  display: block;
+}
+
+
 .tree-pill {
   position: absolute;
   top: -11px;
@@ -548,22 +559,25 @@ th { white-space: nowrap; }
         <div id="arvore-container" class="tree-wrapper"></div>
 
        <div class="mt-4">
-        <div class="row g-3">
-          <div class="col-lg-6">
-            <h6>Comissão por categoria</h6>
-            <div class="card p-3">
-              <canvas id="chart-categoria" height="180"></canvas>
-            </div>
-          </div>
+          <div class="row g-3">
+            <div class="col-12">
+              <h6>Comissão por categoria</h6>
+              <div class="card p-3 chart-box">
+                <canvas id="chart-categoria"></canvas>
+              </div>
 
-          <div class="col-lg-6">
-            <h6>Comissão por produto</h6>
-            <div class="card p-3">
-              <canvas id="chart-produto" height="180"></canvas>
+            </div>
+
+            <div class="col-12">
+              <h6>Comissão por produto</h6>
+              <div class="card p-3 chart-box">
+                <canvas id="chart-produto"></canvas>
+              </div>
+
             </div>
           </div>
         </div>
-      </div>
+
 
 
         <hr class="my-4">
@@ -844,11 +858,19 @@ function getCategoriasPorAssessor(codAssessor) {
             hoverBackgroundColor: "#d9b404",
             borderColor: "#c9ae03",
             borderWidth: 1.2,
-            borderSkipped: false
+            borderSkipped: false,
+            barThickness: 16,
+            maxBarThickness: 20,
+            categoryPercentage: 0.75,
+            barPercentage: 0.9
+
           }]
         },
         options: {
           responsive: true,
+        maintainAspectRatio: false,
+        resizeDelay: 100,
+
           indexAxis: "y",
           layout: { padding: 10 },
           plugins: {
@@ -936,11 +958,19 @@ function getCategoriasPorAssessor(codAssessor) {
         hoverBackgroundColor: "#d9b404",
         borderColor: "#c9ae03",
         borderWidth: 1.2,
-        borderSkipped: false
+        borderSkipped: false,
+        barThickness: 16,
+        maxBarThickness: 20,
+        categoryPercentage: 0.75,
+        barPercentage: 0.9
+
       }]
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
+      resizeDelay: 100,
+
       indexAxis: "y",
       layout: { padding: 10 },
       plugins: {
