@@ -1,0 +1,7 @@
+mudar competência para período
+
+mudar arquivo para versão num
+deixar o voltqr no canto superior esquerdo
+filtro doassessor adicionar o código mais nome 
+enquanto carrega mostrar que esta carregando
+substituir e deletar tabela 

@@ -10,407 +10,55 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
   <style>
-    body {
+   :root {
+  --fundo: #0F0F10;
+  --fundo-card: #1A1A1C;
+  --fundo-card-2: #232326;
+
+  --gold: #C9A86A;
+  --gold-light: #E7D3A5;
+  --gold-dark: #B48A55;
+
+  --texto-primario: #F2F2F2;
+  --texto-secundario: #B5B5B5;
+
+  --borda-fraca: rgba(200, 200, 200, 0.08);
+}
+
+body {
   background: #f5f7fb;
-  font-size: 0.95rem; /* aumenta fonte geral um pouco */
+  font-size: 0.95rem;
 }
 
-/* Aumenta a largura máxima do conteúdo em telas maiores */
 @media (min-width: 1200px) {
-  .container {
-    max-width: 1400px; /* padrão do Bootstrap é 1140px, aqui fica bem mais largo */
-  }
+  .container { max-width: 1400px; }
 }
 
-    .card {
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-    }
-    /* Deixar os números dos cards mais visíveis */
+.card {
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
 .card .fs-4.fw-bold {
   font-size: 1.6rem !important;
 }
 
-
-    table {
-  font-size: 0.95rem; /* ou 1rem se quiser bem grande */
+table {
+  font-size: 0.95rem;
 }
 
-
-    /* TABELAS (resultado + fontes) */
-    table.dataframe {
-      table-layout: auto !important;
-    }
-
-    table.dataframe td,
-    table.dataframe th {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 300px !important;
-      min-width: 150px !important;
-      padding: 6px 10px !important;
-    }
-
-    .logo-canto {
-      position: fixed;
-      top: 15px;
-      left: 20px;
-      width: 60px;
-      height: auto;
-      z-index: 2000;
-    }
-
-    /* Indicadores visuais no cabeçalho da tabela de resultado */
-    th.ordem-crescente::after {
-      content: " ▲";
-      font-size: 0.7rem;
-      color: #444;
-    }
-        /* Limitar altura da tabela detalhada da árvore */
-    #tabela-arvore-wrapper {
-      max-height: 260px;   /* ajuste aqui a altura que achar melhor */
-      overflow-y: auto;    /* ativa scroll vertical dentro da tabela */
-    }
-
-    th.ordem-decrescente::after {
-      content: " ▼";
-      font-size: 0.7rem;
-      color: #444;
-    }
-    th {
-      white-space: nowrap;
-    }
-
-    /* --- Abas modernas estilo Pills --- */
-/* Abas (Pills) padrão */
-.custom-tabs .nav-link {
-  border-radius: 20px;
-  padding: 8px 18px;
-  font-weight: 500;
-  color: #555;
-  background: #f1f1f7;
-  margin-right: 6px;
-  transition: 0.3s;
+.btn-voltar-fixo {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 3000;
 }
 
-/* Aba (Pill) ativa em dourado */
-.custom-tabs .nav-link.active {
-  background: #C9A86A !important;   /* DOURADO PRINCIPAL */
-  color: #fff !important;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(201, 168, 106, 0.45) !important;
-}
+th { white-space: nowrap; }
 
-/* Hover também dourado suave */
-.custom-tabs .nav-link:hover {
-  background: #E6D3A2 !important;   /* DOURADO CLARO */
-  color: #333 !important;
-}
-
-
-/* Botões dourados fixos na cor #f3cb04 */
-.btn-success {
-  background-color: #f3cb04 !important;
-  border-color: #e0b703 !important;
-  color: #3a2f1c !important; /* texto escuro para boa leitura */
-  font-weight: 600;
-  border-radius: 6px;
-  box-shadow: 0 3px 8px rgba(243, 203, 4, 0.35);
-}
-
-/* Hover: um dourado um pouco mais escuro */
-.btn-success:hover {
-  background-color: #d9b404 !important;
-  border-color: #c09f03 !important;
-  color: #3a2f1c !important;
-  box-shadow: 0 4px 12px rgba(243, 203, 4, 0.45);
-}
-
-
-    /* ==== ESTILO DA ÁRVORE (CLARO + ESCADINHA) ===== */
-
-    /* Card da aba Árvore em modo claro */
-    #pane-arvore .card {
-      background: #ffffff;
-      color: #111827;
-      border-radius: 18px;
-      border: 1px solid #e5e7eb;
-    }
-
-    #pane-arvore h2,
-    #pane-arvore h6 {
-      color: #111827;
-    }
-
-    #pane-arvore p,
-    #pane-arvore label,
-    #pane-arvore small,
-    #pane-arvore .text-muted {
-      color: #6b7280 !important;
-    }
-
-    .tree-wrapper {
-      margin-top: 20px;
-      overflow-x: auto;
-      padding: 16px 0 8px 0;
-      text-align: center;
-    }
-
-    .tree {
-      display: inline-block;
-      text-align: center;
-      font-size: 0.85rem;
-    }
-
-    .tree > div {
-      position: relative;
-      padding-bottom: 10px;
-    }
-
-    #btn-arvore {
-    display: none !important;
-}
-    .tree-level {
-      display: flex;
-      justify-content: flex-start;
-      gap: 40px;
-      margin-top: 26px;
-      position: relative;
-    }
-
-    .tree > div > .tree-level:nth-child(1) {
-      margin-left: 0;
-      justify-content: center;
-    }
-    .tree > div > .tree-level:nth-child(2) {
-      margin-left: 80px;
-    }
-    .tree > div > .tree-level:nth-child(3) {
-      margin-left: 160px;
-    }
-    .tree > div > .tree-level:nth-child(4) {
-      margin-left: 240px;
-    }
-
-    .tree-level::before {
-      content: "";
-      position: absolute;
-      top: -18px;
-      left: -40px;
-      width: 40px;
-      height: 1px;
-      background: rgba(148, 163, 184, 0.6);
-    }
-
-    .tree-connector {
-      position: relative;
-    }
-
-    .tree-connector::before {
-      content: "";
-      position: absolute;
-      top: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 1px;
-      height: 18px;
-      background: rgba(148, 163, 184, 0.6);
-    }
-
-    .tree-node {
-       min-width: 230px; 
-      background: linear-gradient(135deg, #f9fafb 0%, #ffffff 60%, #eef2ff 100%);
-      border-radius: 16px;
-      padding: 12px 14px 10px 14px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
-      position: relative;
-    }
-
-    .tree-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #6b7280;
-      margin-bottom: 4px;
-    }
-
-    .tree-value {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #111827;
-    }
-
-    .tree-pill {
-      position: absolute;
-      top: -11px;
-      left: 12px;
-      padding: 2px 10px;
-      border-radius: 999px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      border: 1px solid rgba(148, 163, 184, 0.9);
-    }
-
-    .node-produto .tree-pill {
-      background: #facc15;
-      color: #1f2937;
-    }
-
-    .node-xp .tree-pill {
-      background: #38bdf8;
-      color: #0f172a;
-    }
-
-    .node-escritorio-bruto .tree-pill {
-      background: #a855f7;
-      color: #f9fafb;
-    }
-
-    .node-imposto .tree-pill {
-      background: #f97373;
-      color: #111827;
-    }
-
-    .node-escritorio-pos .tree-pill {
-      background: #22c55e;
-      color: #022c22;
-    }
-
-    .node-assessor .tree-pill {
-      background: #4ade80;
-      color: #052e16;
-    }
-
-    .node-sobra .tree-pill {
-      background: #94a3b8;
-      color: #020617;
-    }
-
-    .arvore-resumo-top {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .arvore-resumo-pill {
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      background: #f9fafb;
-      border: 1px solid rgba(148, 163, 184, 0.8);
-      color: #111827;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .arvore-resumo-pill span.label {
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      font-weight: 600;
-      font-size: 0.68rem;
-      color: #6b7280;
-    }
-
-    .resumo-produto-card {
-      border-radius: 16px;
-      border: 1px solid #e5e7eb;
-      padding: 12px 14px;
-      background: #ffffff;
-      box-shadow: 0 10px 25px rgba(15,23,42,0.08);
-      height: 100%;
-      color: #111827;
-    }
-
-    .resumo-produto-card .titulo-produto {
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-bottom: 6px;
-      color: #111827;
-    }
-
-    .resumo-produto-card small {
-      font-size: 0.7rem;
-      color: #6b7280;
-      text-transform: uppercase;
-    }
-
-    .tree-sublist {
-      margin-top: 8px;
-      border-top: 1px dashed rgba(148, 163, 184, 0.7);
-      padding-top: 6px;
-      text-align: left;
-      font-size: 0.75rem;
-      max-height: 120px;
-      overflow-y: auto;
-    }
-
-    .tree-prod-linha {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 2px;
-    }
-
-    .tree-prod-linha span.prod-nome {
-      font-weight: 500;
-      color: #374151;
-    }
-
-    .tree-prod-linha span.prod-valor {
-      font-variant-numeric: tabular-nums;
-      color: #111827;
-    }
-
-    /* wrapper da tabela detalhada */
-#tabela-arvore-wrapper {
-  max-height: 260px;
-  overflow-x: auto;
-  overflow-y: auto;
-  position: relative;
-}
-
-/* garantir que a tabela não “colapse” as bordas */
-#tabela-arvore-wrapper table {
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-/* 1ª coluna fixa */
-#tabela-arvore-wrapper th:nth-child(1),
-#tabela-arvore-wrapper td:nth-child(1) {
-  position: sticky;
-  left: 0;
-  z-index: 3;
-  background: #fff;
-}
-
-/* 2ª coluna fixa */
-#tabela-arvore-wrapper th:nth-child(2),
-#tabela-arvore-wrapper td:nth-child(2) {
-  position: sticky;
-  left: 150px;   /* largura aproximada da 1ª coluna */
-  z-index: 3;
-  background: #fff;
-}
-
-/* 3ª coluna fixa */
-#tabela-arvore-wrapper th:nth-child(3),
-#tabela-arvore-wrapper td:nth-child(3) {
-  position: sticky;
-  left: 300px;   /* 150px + 150px */
-  z-index: 3;
-  background: #fff;
-}
-/* garante largura fixa para TODAS as colunas da tabela detalhada */
-
-/* área da tabela detalhada da aba árvore */
+/* =========================================================
+   ABA ÁRVORE - TABELA DETALHADA (SEM STICKY / SEM LARGURA FIXA)
+   ========================================================= */
 #tabela-arvore-wrapper {
   max-height: 260px;
   overflow-x: auto;
@@ -419,6 +67,8 @@
 }
 
 #tabela-arvore-wrapper table {
+  table-layout: auto;
+  width: max-content;
   border-collapse: separate;
   border-spacing: 0;
 }
@@ -426,441 +76,498 @@
 #tabela-arvore-wrapper th,
 #tabela-arvore-wrapper td {
   white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  max-width: none !important;
+  min-width: 0 !important;
 }
 
-/* 1ª coluna fixa e com largura 150px */
-#tabela-arvore-wrapper th:nth-child(1),
-#tabela-arvore-wrapper td:nth-child(1) {
-  position: sticky;
-  left: 0;
-  z-index: 3;
-  background: #fff;
-  min-width: 150px;
-  max-width: 150px;
-}
-
-/* 2ª coluna fixa e com largura 150px */
-#tabela-arvore-wrapper th:nth-child(2),
-#tabela-arvore-wrapper td:nth-child(2) {
-  position: sticky;
-  left: 150px;
-  z-index: 3;
-  background: #fff;
-  min-width: 150px;
-  max-width: 150px;
-}
-
-/* 3ª coluna fixa e com largura 150px */
-#tabela-arvore-wrapper th:nth-child(3),
-#tabela-arvore-wrapper td:nth-child(3) {
-  position: sticky;
-  left: 300px;
-  z-index: 3;
-  background: #fff;
-  min-width: 150px;
-  max-width: 150px;
-}
-
-
-/* 1ª coluna fixa */
-#tabela-arvore-wrapper th:nth-child(1),
-#tabela-arvore-wrapper td:nth-child(1) {
-  position: sticky;
-  left: 0;
-  z-index: 3;
-  background: #fff;
-}
-
-/* 2ª coluna fixa */
-#tabela-arvore-wrapper th:nth-child(2),
-#tabela-arvore-wrapper td:nth-child(2) {
-  position: sticky;
-  left: 150px;          /* exatamente 1 coluna de 150px */
-  z-index: 3;
-  background: #fff;
-}
-
-/* 3ª coluna fixa */
-#tabela-arvore-wrapper th:nth-child(3),
-#tabela-arvore-wrapper td:nth-child(3) {
-  position: sticky;
-  left: 300px;          /* 2 colunas de 150px = 300px */
-  z-index: 3;
-  background: #fff;
-}
-
-/* evitar espaços/linhas brancas entre colunas */
-#tabela-arvore-wrapper table {
-  border-collapse: separate;
-  border-spacing: 0;
-}
-#pane-fontes .table-responsive {
-    max-height: 320px;
-    overflow-y: auto;
-    overflow-x: auto;
-    padding-right: 5px;
-    scrollbar-width: thin;
-}
-
-/* AMARELO SUPER SUAVE E PROFISSIONAL PARA "Pago ao assessor" */
-.node-assessor.tree-node {
-  background: linear-gradient(
-    145deg,
-    #fffdf6 0%,   /* quase branco */
-    #fff9e5 45%,  /* amarelo muito suave */
-    #fff4cc 100%  /* tom amarelo bem claro */
-  ) !important;
-
-  color: #4a493f !important;
-  border: 1px solid #e8ddb0 !important;
-  box-shadow: 0 2px 8px rgba(220, 200, 120, 0.18) !important; /* sombra suave */
-  transform: scale(1.01); /* menor ainda */
-}
-
-/* Label */
-.node-assessor .tree-label {
-  color: #756c52 !important;
-  font-size: 0.82rem;
+/* Botões dourados fixos na cor #f3cb04 */
+.btn-success {
+  background-color: #f3cb04 !important;
+  border-color: #e0b703 !important;
+  color: #3a2f1c !important;
   font-weight: 600;
+  border-radius: 6px;
+  box-shadow: 0 3px 8px rgba(243, 203, 4, 0.35);
+}
+.btn-success:hover {
+  background-color: #d9b404 !important;
+  border-color: #c09f03 !important;
+  color: #3a2f1c !important;
+  box-shadow: 0 4px 12px rgba(243, 203, 4, 0.45);
 }
 
-/* Valor do assessor mais visível */
-.node-assessor .tree-value {
-  color: #3a3320 !important;        /* mais escuro e mais contrastado */
-  font-size: 1.30rem !important;    /* um pouco maior */
-  font-weight: 700 !important;      /* mais forte */
-  text-shadow: 0 0 4px rgba(255, 240, 150, 0.6);  /* leve brilho muito suave */
-
-:root {
-  /* Fundo e superfície */
-  --fundo: #0F0F10;
-  --fundo-card: #1A1A1C;
-  --fundo-card-2: #232326;
-
-  /* Dourados */
-  --gold: #C9A86A;
-  --gold-light: #E7D3A5;
-  --gold-dark: #B48A55;
-
-  /* Texto */
-  --texto-primario: #F2F2F2;
-  --texto-secundario: #B5B5B5;
-
-  /* Bordas suaves */
-  --borda-fraca: rgba(200, 200, 200, 0.08);
-}
-
-}
-
-
-/* Pill */
-.node-assessor .tree-pill {
-  background: #fff4cc !important;
-  color: #4f4328 !important;
-  border-color: #e8ddb0 !important;
-  font-weight: 600;
-}
-~
 /* Botões outline dourados */
 .btn-outline-success {
-  color: #f3cb04 !important;
-  border-color: #f3cb04 !important;
-  font-weight: 600;
-}
-
-/* Hover fica com fundo dourado como os outros */
-.btn-outline-success:hover {
   background-color: #f3cb04 !important;
   color: #3a2f1c !important;
   border-color: #e0b703 !important;
-}
-
-/* Botão sempre dourado (versão sólida) */
-.btn-outline-success {
-  background-color: #f3cb04 !important; /* fundo dourado sempre */
-  color: #3a2f1c !important;            /* texto escuro */
-  border-color: #e0b703 !important;     /* borda dourado escuro */
   font-weight: 600;
 }
-
-/* Hover: dourado um pouco mais escuro */
 .btn-outline-success:hover {
   background-color: #d9b404 !important;
   border-color: #c09f03 !important;
   color: #3a2f1c !important;
 }
 
+/* =========================================================
+   ESTILO DA ÁRVORE (CLARO + ESCADINHA)
+   ========================================================= */
 
+#pane-arvore .card {
+  background: #ffffff;
+  color: #111827;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+}
+
+#pane-arvore h2,
+#pane-arvore h6 {
+  color: #111827;
+}
+
+#pane-arvore p,
+#pane-arvore label,
+#pane-arvore small,
+#pane-arvore .text-muted {
+  color: #6b7280 !important;
+}
+
+.tree-wrapper {
+  margin-top: 20px;
+  overflow-x: auto;
+  padding: 16px 0 8px 0;
+  text-align: center;
+}
+
+.tree {
+  display: inline-block;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.tree > div {
+  position: relative;
+  padding-bottom: 10px;
+}
+
+#btn-arvore { display: none !important; }
+
+.tree-level {
+  display: flex;
+  justify-content: flex-start;
+  gap: 40px;
+  margin-top: 26px;
+  position: relative;
+}
+
+.tree > div > .tree-level:nth-child(1) {
+  margin-left: 0;
+  justify-content: center;
+}
+.tree > div > .tree-level:nth-child(2) { margin-left: 80px; }
+.tree > div > .tree-level:nth-child(3) { margin-left: 160px; }
+.tree > div > .tree-level:nth-child(4) { margin-left: 240px; }
+
+.tree-level::before {
+  content: "";
+  position: absolute;
+  top: -18px;
+  left: -40px;
+  width: 40px;
+  height: 1px;
+  background: rgba(148, 163, 184, 0.6);
+}
+
+.tree-connector { position: relative; }
+
+.tree-connector::before {
+  content: "";
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 18px;
+  background: rgba(148, 163, 184, 0.6);
+}
+
+.tree-node {
+  min-width: 230px;
+  background: linear-gradient(135deg, #f9fafb 0%, #ffffff 60%, #eef2ff 100%);
+  border-radius: 16px;
+  padding: 12px 14px 10px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+  position: relative;
+}
+
+.tree-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.tree-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.tree-pill {
+  position: absolute;
+  top: -11px;
+  left: 12px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid rgba(148, 163, 184, 0.9);
+}
+
+.node-produto .tree-pill { background: #facc15; color: #1f2937; }
+.node-xp .tree-pill { background: #38bdf8; color: #0f172a; }
+.node-escritorio-bruto .tree-pill { background: #a855f7; color: #f9fafb; }
+.node-imposto .tree-pill { background: #f97373; color: #111827; }
+.node-escritorio-pos .tree-pill { background: #22c55e; color: #022c22; }
+.node-assessor .tree-pill { background: #4ade80; color: #052e16; }
+.node-sobra .tree-pill { background: #94a3b8; color: #020617; }
+
+.arvore-resumo-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.arvore-resumo-pill {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  background: #f9fafb;
+  border: 1px solid rgba(148, 163, 184, 0.8);
+  color: #111827;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.arvore-resumo-pill span.label {
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 600;
+  font-size: 0.68rem;
+  color: #6b7280;
+}
+
+.resumo-produto-card {
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  padding: 12px 14px;
+  background: #ffffff;
+  box-shadow: 0 10px 25px rgba(15,23,42,0.08);
+  height: 100%;
+  color: #111827;
+}
+
+.resumo-produto-card .titulo-produto {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: #111827;
+}
+
+.resumo-produto-card small {
+  font-size: 0.7rem;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.tree-sublist {
+  margin-top: 8px;
+  border-top: 1px dashed rgba(148, 163, 184, 0.7);
+  padding-top: 6px;
+  text-align: left;
+  font-size: 0.75rem;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.tree-prod-linha {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.tree-prod-linha span.prod-nome {
+  font-weight: 500;
+  color: #374151;
+}
+.tree-prod-linha span.prod-valor {
+  font-variant-numeric: tabular-nums;
+  color: #111827;
+}
+
+/* AMARELO SUAVE PARA "Pago ao assessor" */
+.node-assessor.tree-node {
+  background: linear-gradient(145deg, #fffdf6 0%, #fff9e5 45%, #fff4cc 100%) !important;
+  color: #4a493f !important;
+  border: 1px solid #e8ddb0 !important;
+  box-shadow: 0 2px 8px rgba(220, 200, 120, 0.18) !important;
+  transform: scale(1.01);
+}
+
+.node-assessor .tree-label {
+  color: #756c52 !important;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.node-assessor .tree-value {
+  color: #3a3320 !important;
+  font-size: 1.30rem !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 4px rgba(255, 240, 150, 0.6);
+}
+
+.node-assessor .tree-pill {
+  background: #fff4cc !important;
+  color: #4f4328 !important;
+  border-color: #e8ddb0 !important;
+  font-weight: 600;
+}
+
+/* ===== Overlay de carregamento ===== */
+#loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  backdrop-filter: blur(2px);
+}
+.loading-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.loading-text {
+  font-weight: 600;
+  color: #222;
+}
   </style>
 </head>
+
 <body>
-  <!-- LOGO NO CANTO -->
-  <!--  <img src="{{ url_for('static', filename='staticlogo.png') }}" class="logo-canto">-->
+  <!-- Overlay -->
+  <div id="loading-overlay">
+    <div class="loading-card">
+      <div class="spinner-border" role="status" aria-hidden="true"></div>
+      <div class="loading-text">Carregando...</div>
+    </div>
+  </div>
 
   <div class="container py-5">
-    <div class="row mb-3">
-      <div class="col-12 d-flex justify-content-between align-items-center">
-        <h1 class="h4 m-0">Resultado - Valor Total por Assessor</h1>
-        <div>
-          <a href="/download" class="btn btn-success btn-sm me-2">Baixar Excel</a>
-          <a href="/" class="btn btn-outline-secondary btn-sm">Voltar</a>
-        </div>
+
+    {% if competencia %}
+      <div class="alert alert-info py-2 mb-3">
+        <strong>Período:</strong> {{ competencia }}
+      </div>
+    {% endif %}
+
+    <!-- ===================== TROCAR ARQUIVO (SUPABASE) ===================== -->
+<div class="card p-3 mb-3" id="trocar-arquivo">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <div>
+      <div class="fw-semibold">Trocar arquivo exibido</div>
+      <div class="text-muted small">
+        Selecione o Período e a versão do df_final para recarregar este dashboard.
       </div>
     </div>
 
-    <!-- ABAS (PILLS) -->
-    <ul class="nav nav-pills mb-3 custom-tabs" id="resultadoTabs" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link active"
-          id="tab-resumo"
-          data-bs-toggle="tab"
-          data-bs-target="#pane-resumo"
-          type="button"
-          role="tab"
-          aria-controls="pane-resumo"
-          aria-selected="true"
-        >
-          Resumo
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          id="tab-arvore"
-          data-bs-toggle="tab"
-          data-bs-target="#pane-arvore"
-          type="button"
-          role="tab"
-          aria-controls="pane-arvore"
-          aria-selected="false"
-        >
-          Árvore de comissão
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          id="tab-fontes"
-          data-bs-toggle="tab"
-          data-bs-target="#pane-fontes"
-          type="button"
-          role="tab"
-          aria-controls="pane-fontes"
-          aria-selected="false"
-        >
-          Fontes (tabelas originais)
-        </button>
-      </li>
-    </ul>
-
-    <!-- CONTEÚDO DAS ABAS -->
-    <div class="tab-content" id="resultadoTabsContent">
-
-      <!-- ABA: RESUMO -->
-      <div
-        class="tab-pane fade show active"
-        id="pane-resumo"
-        role="tabpanel"
-        aria-labelledby="tab-resumo"
-      >
-
-        <!-- DASHBOARD -->
-        <div class="row g-3 mb-4">
-          <div class="col-md-3">
-            <div class="card p-3">
-              <div class="text-muted small">Qtd. de Assessores</div>
-              <div class="fs-4 fw-bold" id="dash-total-assessores">
-                {{ total_assessores }}
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card p-3">
-              <div class="text-muted small">Comissão liquída total dos Assessores </div>
-              <div class="fs-4 fw-bold" id="dash-soma-total">
-                {{ soma_total }}
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card p-3">
-              <div class="text-muted small">Média por Assessor</div>
-              <div class="fs-4 fw-bold" id="dash-media-total">
-                {{ media_total }}
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card p-3">
-              <div class="text-muted small">Maior Comissão  </div>
-              <div class="fs-4 fw-bold" id="dash-max-total">
-                {{ max_total }}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- GRÁFICO -->
-        <div class="row mb-4">
-          <div class="col-12">
-            <div class="card p-3">
-              <h2 class="h6 mb-3">Top Assessores por Valor Total (filtrados)</h2>
-              <canvas id="chart-top" height="120"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <!-- FILTRO + TABELA FINAL -->
-        <div class="row">
-          <div class="col-12">
-            <div class="card p-3">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h6 m-0">Detalhamento por assessor</h2>
-
-                <div class="d-flex gap-2 align-items-center">
-                  <!-- Botão para baixar esta tabela (resultado final df_final) -->
-                  <a href="/download" class="btn btn-sm btn-success">
-                    Baixar tabela (Excel)
-                  </a>
-
-                  <div class="input-group input-group-sm position-relative" style="max-width: 260px;">
-                    <span class="input-group-text">Filtrar assessor</span>
-                    <input
-                      type="text"
-                      id="filtro-assessor"
-                      class="form-control"
-                      placeholder="Código ou parte do código"
-                      autocomplete="off"
-                    >
-                    <!-- Dropdown de sugestões -->
-                    <div
-                      id="sugestoes-assessor"
-                      class="list-group position-absolute w-100"
-                      style="top: 100%; left: 0; max-height: 200px; overflow-y: auto; display:none; z-index: 1000;"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="table-responsive" id="tabela-final-wrapper">
-                {{ tabela | safe }}
-              </div>
-            </div>
-          </div>
-        </div>
-
+    <form action="/visualizar" method="get" class="row g-2 align-items-end">
+      <div class="col-auto">
+        <label class="form-label small mb-1">Período</label>
+        <select id="competencia-select-res" name="competencia" class="form-select form-select-sm">
+          <option value="">— Selecione —</option>
+          {% for c in competencias_disponiveis %}
+            <option value="{{ c }}" {% if c == competencia_atual %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
       </div>
 
-      <!-- ABA: ÁRVORE -->
-      <div
-        class="tab-pane fade"
-        id="pane-arvore"
-        role="tabpanel"
-        aria-labelledby="tab-arvore"
-      >
-        <div class="card p-3 mb-3">
-          <h2 class="h6 mb-3">Árvore de recebimento de comissão</h2>
-          <p class="text-muted small mb-3">
-            Visualização do caminho do dinheiro: <strong>Produto</strong> → <strong>XP</strong> → <strong>Escritório (bruto)</strong> → <strong>Imposto</strong> → <strong>Escritório pós imposto</strong> → <strong>Assessor</strong> → <strong>Sobra Escritório</strong>.
-          </p>
+      <div class="col-auto">
+        <label class="form-label small mb-1">Arquivo (versão)</label>
 
-          <div class="row g-3 align-items-end mb-3">
-  <div class="col-md-4">
-    <label class="form-label small fw-semibold">Assessor</label>
-    <div class="input-group input-group-sm position-relative">
-      <span class="input-group-text">Assessor</span>
-      <input
-        type="text"
-        id="assessor-arvore"
-        class="form-control"
-        placeholder="Digite para filtrar"
-        autocomplete="off"
-      >
-      <div
-        id="sugestoes-assessor-arvore"
-        class="list-group position-absolute w-100"
-        style="top: 100%; left: 0; max-height: 200px; overflow-y: auto; display:none; z-index: 1000;"
-      ></div>
-    </div>
-  </div>
+        <!-- envia o path real -->
+        <input type="hidden" id="arquivo-hidden-res" name="file" value="{{ caminho_df_final or '' }}"/>
 
-  <div class="col-md-4">
-    <label class="form-label small fw-semibold">Categoria</label>
-    <div class="input-group input-group-sm position-relative">
-      <span class="input-group-text">Categoria</span>
-      <input
-        type="text"
-        id="produto-arvore"
-        class="form-control"
-        placeholder="Digite para filtrar"
-        autocomplete="off"
-      >
-      <div
-        id="sugestoes-produto-arvore"
-        class="list-group position-absolute w-100"
-        style="top: 100%; left: 0; max-height: 200px; overflow-y: auto; display:none; z-index: 1000;"
-      ></div>
-    </div>
-  </div>
+        <!-- só mostra ao usuário -->
+        <input
+          type="text"
+          id="arquivo-label-res"
+          class="form-control form-control-sm"
+          value="{% if caminho_df_final %}{{ caminho_df_final.split('/')[-1] }}{% else %}Selecione um Período{% endif %}"
+          disabled
+          style="min-width: 220px;"
+        />
+      </div>
 
-  <div class="col-md-4 text-md-end">
-    <button id="btn-arvore" class="btn btn-primary btn-sm mt-3 mt-md-0">
-      Atualizar árvore
-    </button>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-outline-dark btn-sm">
+          Aplicar
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 
 
-          <div class="mb-2 small">
-            <span id="texto-filtro-arvore" class="text-muted"></span>
-          </div>
-
-            <!-- TÍTULO + BOTÃO QUE ABRE/FECHA O RESUMO -->
-  <h6 class="mt-3">
-  <button
-    class="btn btn-sm btn-outline-success rounded-pill d-inline-flex align-items-center gap-1 btn-resumo-categoria"
-    type="button"
-    data-bs-toggle="collapse"
-    data-bs-target="#resumo-categoria-collapse"
-    aria-expanded="false"
-    aria-controls="resumo-categoria-collapse"
-  >
-    <span class="me-1">Resumo por categoria</span>
-    <span id="icone-resumo-categoria" class="small">▸</span>
-  </button>
-</h6>
-
-
-  <!-- CONTEÚDO COLAPSÁVEL (ESCONDIDO POR PADRÃO) -->
-  <div class="collapse" id="resumo-categoria-collapse">
-    <div class="row g-3" id="resumo-produtos">
-      <!-- cards preenchidos via JS continuam aqui -->
-    </div>
-  </div>
-
-
-          <hr class="my-4">
-
-          <!-- SOMENTE A ÁRVORE AQUI -->
-          <h6>Árvore do fluxo de comissão</h6>
-    <div id="arvore-container" class="tree-wrapper">
-      <!-- árvore é renderizada aqui via JS -->
-    </div>
-
-    <!-- NOVO: gráfico de comissão por categoria -->
-    <div class="mt-4">
-      <h6>Comissão por categoria (pago ao assessor)</h6>
-      <div class="card p-3">
-        <canvas id="chart-categoria" height="120"></canvas>
+    <div class="row mb-3">
+      <div class="col-12 d-flex justify-content-between align-items-center">
+        <h1 class="h4 m-0">Árvore de comissão</h1>
+        <div>
+          <a href="/" class="btn btn-outline-secondary btn-sm btn-voltar-fixo">Voltar</a>
+        </div>
       </div>
     </div>
 
-    <hr class="my-4">
+    <!-- ÚNICO CONTEÚDO: ÁRVORE -->
+    <div id="pane-arvore">
+      <div class="card p-3 mb-3">
+        <h2 class="h6 mb-3">Árvore de recebimento de comissão</h2>
+        <p class="text-muted small mb-3">
+          Visualização do caminho do dinheiro:
+          <strong>Produto</strong> → <strong>XP</strong> → <strong>Escritório (bruto)</strong> →
+          <strong>Imposto</strong> → <strong>Escritório pós imposto</strong> →
+          <strong>Assessor</strong> → <strong>Sobra Escritório</strong>.
+        </p>
+
+        <div class="row g-3 align-items-end mb-3">
+
+          <!-- Assessor -->
+           <div class="col-md-4" style="display:none">
+
+            <label class="form-label small fw-semibold">Assessor</label>
+            <div class="input-group input-group-sm position-relative w-100">
+              <span class="input-group-text">Assessor</span>
+              <input
+                type="text"
+                id="assessor-arvore"
+                class="form-control"
+                placeholder="Digite para filtrar"
+                autocomplete="off"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                id="btn-limpar-assessor-arvore"
+              >✕</button>
+
+              <div
+                id="sugestoes-assessor-arvore"
+                class="list-group position-absolute w-100"
+                style="top:100%;left:0;max-height:200px;overflow-y:auto;display:none;z-index:1000;"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Categoria -->
+          <div class="col-md-4">
+            <label class="form-label small fw-semibold">Categoria</label>
+            <div class="input-group input-group-sm position-relative w-100">
+              <span class="input-group-text">Categoria</span>
+              <input
+                type="text"
+                id="produto-arvore"
+                class="form-control"
+                placeholder="Digite para filtrar"
+                autocomplete="off"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                id="btn-limpar-categoria-arvore"
+              >✕</button>
+
+              <div
+                id="sugestoes-produto-arvore"
+                class="list-group position-absolute w-100"
+                style="top:100%;left:0;max-height:200px;overflow-y:auto;display:none;z-index:1000;"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Botão (mantido, mas fica escondido pelo CSS #btn-arvore {display:none}) -->
+          <div class="col-md-4 text-md-end">
+            <button id="btn-arvore" class="btn btn-primary btn-sm mt-3 mt-md-0">
+              Atualizar árvore
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-2 small">
+          <span id="texto-filtro-arvore" class="text-muted"></span>
+        </div>
+
+        <h6 class="mt-3">
+          <button
+            class="btn btn-sm btn-outline-success rounded-pill d-inline-flex align-items-center gap-1 btn-resumo-categoria"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#resumo-categoria-collapse"
+            aria-expanded="false"
+            aria-controls="resumo-categoria-collapse"
+          >
+            <span class="me-1">Resumo por categoria</span>
+            <span id="icone-resumo-categoria" class="small">▸</span>
+          </button>
+        </h6>
+
+        <div class="collapse" id="resumo-categoria-collapse">
+          <div class="row g-3" id="resumo-produtos"></div>
+        </div>
+
+        <hr class="my-4">
+
+        <h6>Árvore do fluxo de comissão</h6>
+        <div id="arvore-container" class="tree-wrapper"></div>
+
+       <div class="mt-4">
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <h6>Comissão por categoria</h6>
+            <div class="card p-3">
+              <canvas id="chart-categoria" height="180"></canvas>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <h6>Comissão por produto</h6>
+            <div class="card p-3">
+              <canvas id="chart-produto" height="180"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
-          <!-- TABELA PLANA FILTRADA -->
-          <!-- TABELA PLANA FILTRADA -->
+        <hr class="my-4">
+
         <div class="d-flex justify-content-between align-items-center">
           <h6 class="mb-0">Tabela detalhada</h6>
           <button
@@ -872,414 +579,91 @@
           </button>
         </div>
 
-        <div id="tabela-arvore-wrapper" class="table-responsive mt-2">
-          <!-- tabela é renderizada aqui via JS -->
-        </div>
+        <div id="tabela-arvore-wrapper" class="table-responsive mt-2"></div>
 
-            <!-- tabela é renderizada aqui via JS -->
-          </div>
+        <hr class="my-4">
 
-          <hr class="my-4">
-
-          <!-- TABELA HIERÁRQUICA: Assessor -> Produto -> Operações -->
-          <h6>Tabela descritiva (Assessor → Categoria → Produto → Operações)</h6>
-          
-          <div id="tabela-hierarquica-wrapper"></div>
-
-        </div>
+        <h6>Tabela descritiva (Assessor → Categoria → Produto → Operações)</h6>
+        <div id="tabela-hierarquica-wrapper"></div>
       </div>
+    </div>
 
-      <!-- ABA: FONTES (TABELAS ORIGINAIS) -->
-      <div
-        class="tab-pane fade"
-        id="pane-fontes"
-        role="tabpanel"
-        aria-labelledby="tab-fontes"
-      >
-        <div class="card p-3">
-          <h2 class="h6 mb-3">Tabelas de origem (fontes)</h2>
-          <p class="text-muted small">
-            Abaixo estão todas as planilhas que foram importadas, em formato de tabela.
-          </p>
+  </div>
 
-          {% if tabelas_fontes %}
-          <div class="accordion" id="accordionFontes">
-            {% for nome, tabela_html in tabelas_fontes.items() %}
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="heading{{ loop.index }}">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapse{{ loop.index }}"
-                    aria-expanded="false"
-                    aria-controls="collapse{{ loop.index }}"
-                  >
-                    {{ nome }}
-                  </button>
-                </h2>
-                <div
-                  id="collapse{{ loop.index }}"
-                  class="accordion-collapse collapse"
-                  aria-labelledby="heading{{ loop.index }}"
-                  data-bs-parent="#accordionFontes"
-                >
-                  <div class="accordion-body">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-                    {% if links_fontes and links_fontes.get(nome) %}
-                      <a
-                        href="{{ links_fontes.get(nome) }}"
-                        class="btn btn-sm btn-success mb-2"
-                      >
-                        Baixar esta tabela (Excel)
-                      </a>
-                    {% endif %}
+ <script>
+  const compSelRes = document.getElementById("competencia-select-res");
+  const arqHiddenRes = document.getElementById("arquivo-hidden-res");
+  const arqLabelRes  = document.getElementById("arquivo-label-res");
 
-                    <div class="table-responsive">
-                      {{ tabela_html | safe }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            {% endfor %}
-          </div>
-          {% else %}
-            <div class="alert alert-warning mb-0">
-              Nenhuma tabela de fonte disponível.
-            </div>
-          {% endif %}
-        </div>
-      </div>
+  async function carregarUltimoArquivoResultado(comp) {
+    arqHiddenRes.value = "";
+    arqLabelRes.value = "Carregando...";
 
-    </div> <!-- fim .tab-content -->
-  </div> <!-- fim .container -->
-
-  <!-- JS: Ordenação da Tabela de Resultado -->
-  <script>
-        // TABELA PLANA FILTRADA COM COLUNAS ORDENADAS
-    // TABELA PLANA FILTRADA (Tabela detalhada) COM COLUNAS ORDENADAS
-function montarTabelaArvore(dadosFiltrados) {
-  const wrapper = document.getElementById("tabela-arvore-wrapper");
-  if (!wrapper) return;
-
-  if (!dadosFiltrados || !dadosFiltrados.length) {
-    wrapper.innerHTML = '<p class="text-muted small mb-0">Nenhuma linha para este filtro.</p>';
-    return;
-  }
-
-  // pega todas as colunas existentes nas linhas retornadas
-  const todasColunas = Object.keys(dadosFiltrados[0]);
-
-  // colunas na ordem desejada (mas só as que existem de fato)
-  const colunasPrincipais = COLUNAS_ORDENADAS.filter(c =>
-    todasColunas.includes(c)
-  );
-
-  // se tiver alguma coluna extra que não está na lista padrão, joga pro final
-  const colunasExtras = todasColunas.filter(c =>
-    !COLUNAS_ORDENADAS.includes(c)
-  );
-
-  const colunas = [...colunasPrincipais, ...colunasExtras];
-
-  // monta o cabeçalho
-  let thead = "<thead><tr>" +
-    colunas.map(c => `<th>${c}</th>`).join("") +
-    "</tr></thead>";
-
-  // monta o corpo
-  let tbody = "<tbody>" +
-    dadosFiltrados.map(linha => {
-      return "<tr>" + colunas.map(c => {
-        const valor = (linha[c] === null || linha[c] === undefined) ? "" : linha[c];
-        return `<td>${valor}</td>`;
-      }).join("") + "</tr>";
-    }).join("") +
-    "</tbody>";
-
-  // injeta a tabela no wrapper
-  wrapper.innerHTML = `
-    <table class="table table-striped table-bordered table-sm">
-      ${thead}
-      ${tbody}
-    </table>
-  `;
-}
-
-
-
-    document.addEventListener("DOMContentLoaded", habilitarOrdenacaoTabela);
-    
-  </script>
-
-  <!-- JS: Filtro, dashboard e gráfico -->
-  <script>
-    const filtroInput = document.getElementById('filtro-assessor');
-    const tabela = document.querySelector('#tabela-final-wrapper table');
-    const cardTotal = document.getElementById('dash-total-assessores');
-    const cardSoma = document.getElementById('dash-soma-total');
-    const cardMedia = document.getElementById('dash-media-total');
-    const cardMax = document.getElementById('dash-max-total');
-    const sugestoesContainer = document.getElementById('sugestoes-assessor');
-    let listaAssessores = [];
-
-    const ctx = document.getElementById('chart-top').getContext('2d');
-    const chartTop = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: [],
-        datasets: [{
-          backgroundColor: '#f3cb04',
-          hoverBackgroundColor: '#d9b404',
-
-          label: 'Valor Total Assessor (R$)',
-          data: [],
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: { beginAtZero: true }
-        }
-      }
-    });
-
-    function atualizarURLComFiltroArvore() {
-  const inputAss = document.getElementById("assessor-arvore");
-  if (!inputAss) return;
-
-  const valor = inputAss.value.trim();
-  const url = new URL(window.location.href);
-
-  if (valor) {
-    url.searchParams.set("cod", valor);        // usa o MESMO parâmetro
-  } else {
-    url.searchParams.set("cod", "FeFePaFaHi"); // placeholder quando vazio
-  }
-
-  history.replaceState(null, "", url.toString());
-}
-
-
-
-    function carregarListaAssessores() {
-      if (!tabela) return;
-
-      const ths = tabela.querySelectorAll('thead th');
-      let idxCod = -1;
-
-      ths.forEach((th, i) => {
-        const txt = th.textContent.trim().toLowerCase();
-        if (txt === 'código assessor' || txt === 'codigo assessor') idxCod = i;
-      });
-
-      if (idxCod === -1) return;
-
-      const linhas = tabela.querySelectorAll('tbody tr');
-      const setCodigos = new Set();
-
-      linhas.forEach(tr => {
-        const tds = tr.querySelectorAll('td');
-        const cod = (tds[idxCod]?.textContent || "").trim();
-        if (cod) setCodigos.add(cod);
-      });
-
-      listaAssessores = Array.from(setCodigos).sort();
+    if (!comp) {
+      arqLabelRes.value = "Selecione um Período";
+      return;
     }
 
-    function esconderSugestoes() {
-      if (sugestoesContainer) {
-        sugestoesContainer.style.display = 'none';
-        sugestoesContainer.innerHTML = '';
-      }
-    }
+    try {
+      const res = await fetch(`/api/arquivos?competencia=${encodeURIComponent(comp)}`);
+      const data = await res.json();
 
-    function mostrarSugestoes() {
-      if (!sugestoesContainer) return;
-      if (!listaAssessores || !listaAssessores.length) return;
-
-      const termo = filtroInput.value.toLowerCase().trim();
-      let listaFiltrada;
-
-      if (!termo) {
-        listaFiltrada = listaAssessores;
-      } else {
-        listaFiltrada = listaAssessores.filter(cod =>
-          cod.toLowerCase().includes(termo)
-        );
-      }
-
-      sugestoesContainer.innerHTML = '';
-
-      if (!listaFiltrada.length) {
-        esconderSugestoes();
+      if (!data.ok || !data.files || !data.files.length) {
+        arqLabelRes.value = "Nenhum df_final encontrado";
         return;
       }
 
-      listaFiltrada.slice(0, 50).forEach(cod => {
-        const item = document.createElement('button');
-        item.type = 'button';
-        item.className = 'list-group-item list-group-item-action py-1 px-2';
-        item.textContent = cod;
+      // 🔑 SEMPRE pega o mais recente
+      const latestPath = data.files[0];
+      arqHiddenRes.value = latestPath;
+      arqLabelRes.value = latestPath.split("/").pop();
 
-        item.addEventListener('click', () => {
-          filtroInput.value = cod;
-          atualizarURLComFiltro();
-          recalcularDashboard();
-          esconderSugestoes();
-        });
-
-        sugestoesContainer.appendChild(item);
-      });
-
-      sugestoesContainer.style.display = 'block';
+    } catch (e) {
+      arqLabelRes.value = "Erro ao listar arquivos";
     }
+  }
 
-    function parseNumero(texto) {
-      if (!texto) return 0;
-      texto = texto.toString().trim();
-      texto = texto.replace(/[^0-9.,-]/g, '');
-      texto = texto.replace(/\./g, '').replace(',', '.');
-      const n = parseFloat(texto);
-      return isNaN(n) ? 0 : n;
-    }
+  compSelRes?.addEventListener("change", (e) => {
+    carregarUltimoArquivoResultado(e.target.value);
+  });
 
-    function recalcularDashboard() {
-      if (!tabela) return;
+  // quando a página já abre com mês selecionado
+  (function initTrocaResultado() {
+    const compAtual = compSelRes?.value;
+    if (compAtual) carregarUltimoArquivoResultado(compAtual);
+  })();
+</script>
 
-      const filtro = filtroInput.value.toLowerCase().trim();
-      const linhas = tabela.querySelectorAll('tbody tr');
-      const ths = tabela.querySelectorAll('thead th');
 
-      let idxCod = -1;
-      let idxValorTotal = -1;
-      ths.forEach((th, i) => {
-        const txt = th.textContent.trim().toLowerCase();
-        if (txt === 'código assessor' || txt === 'codigo assessor') idxCod = i;
-        if (txt === 'valor total assessor') idxValorTotal = i;
-      });
 
-      if (idxCod === -1 || idxValorTotal === -1) {
-        console.warn('Não encontrei colunas "Código Assessor" ou "Valor Total Assessor" na tabela.');
-        return;
-      }
-
-      let dados = [];
-
-      linhas.forEach(tr => {
-        const tds = tr.querySelectorAll('td');
-        const cod = (tds[idxCod]?.textContent || "").trim();
-        const valorTexto = (tds[idxValorTotal]?.textContent || "").trim();
-        const valor = parseNumero(valorTexto);
-
-        const match = !filtro || cod.toLowerCase().includes(filtro);
-        tr.style.display = match ? '' : 'none';
-
-        if (match) {
-          dados.push({ codigo: cod, valor: valor });
-        }
-      });
-
-      const qtd = dados.length;
-      const soma = dados.reduce((acc, d) => acc + d.valor, 0);
-      const media = qtd ? soma / qtd : 0;
-      const max = qtd ? Math.max(...dados.map(d => d.valor)) : 0;
-
-      function formatBRL(n) {
-        return "R$ " + n.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-      }
-
-      cardTotal.innerText = qtd;
-      cardSoma.innerText = formatBRL(soma);
-      cardMedia.innerText = formatBRL(media);
-      cardMax.innerText = formatBRL(max);
-
-      dados.sort((a, b) => b.valor - a.valor);
-      const top = dados.slice(0, 10);
-      chartTop.data.labels = top.map(d => d.codigo);
-      chartTop.data.datasets[0].data = top.map(d => d.valor);
-      chartTop.update();
-    }
-
-    function atualizarURLComFiltro() {
-      const valor = filtroInput.value.trim();
-      const url = new URL(window.location.href);
-
-      if (valor) {
-        url.searchParams.set('cod', valor);
-      } else {
-        url.searchParams.set('cod', 'FeFePaFaHi');
-      }
-
-      history.replaceState(null, '', url.toString());
-    }
-
-    if (filtroInput) {
-      filtroInput.addEventListener('input', () => {
-        atualizarURLComFiltro();
-        recalcularDashboard();
-        mostrarSugestoes();
-      });
-
-      filtroInput.addEventListener('focus', () => {
-        mostrarSugestoes();
-      });
-    }
-
-    document.addEventListener('click', (e) => {
-      if (!sugestoesContainer.contains(e.target) && e.target !== filtroInput) {
-        esconderSugestoes();
-      }
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const url = new URL(window.location.href);
-      const codParam = url.searchParams.get('cod');
-
-      if (codParam) {
-        if (codParam === 'FeFePaFaHi') {
-          filtroInput.value = '';
-        } else {
-          filtroInput.value = codParam;
-        }
-      } else {
-        url.searchParams.set('cod', 'FeFePaFaHi');
-        history.replaceState(null, '', url.toString());
-      }
-
-      carregarListaAssessores();
-      recalcularDashboard();
-      mostrarSugestoes();
-    });
-  </script>
-
-    <!-- JS: Árvore de comissão (usa df_juntar) -->
   <script>
     // df_juntar vindo do Python
     const dfJuntar = {{ df_juntar | tojson | safe }};
-    let chartCategoria = null; // gráfico de comissão por categoria na aba Árvore
+    let chartCategoria = null;
+    let chartProduto = null;
 
 
-      const COLUNAS_ORDENADAS = [
-    "Código Assessor",
-    "Categoria",
-    "Produto",
-    "Código Cliente",
-    "Receita Bruta",
-    "Receita Líquida",
-    "Comissão (%) Escritório",
-    "Desconto de Transferência de Clientes Fracionado",
-    "Comissão Escritório",
-    "Imposto + Despesa",
-    "Valor Imposto",
-    "Sem Imposto",
-    "percentual",
-    "Valor Assessor",
-    "Valor Escritório"
-  ];
+    const COLUNAS_ORDENADAS = [
+      "Código Assessor",
+      "Categoria",
+      "Produto",
+      "Código Cliente",
+      "Receita Bruta",
+      "Receita Líquida",
+      "Comissão (%) Escritório",
+      "Desconto de Transferência de Clientes Fracionado",
+      "Comissão Escritório",
+      "Imposto + Despesa",
+      "Valor Imposto",
+      "Sem Imposto",
+      "percentual",
+      "Valor Assessor",
+      "Valor Escritório"
+    ];
 
-    // vai guardar SEMPRE o último conjunto de linhas filtradas
-let dadosArvoreAtual = [];
+    let dadosArvoreAtual = [];
 
     function formatBRL(v) {
       if (!v) v = 0;
@@ -1298,911 +682,813 @@ let dadosArvoreAtual = [];
       return Array.from(set).sort();
     }
 
-    // === SELECTS: Assessor + Categoria ===
-    // LISTAS DE AUTOCOMPLETE DA ABA ÁRVORE
-let listaAssessoresArvore = [];
-let listaCategoriasArvore = [];
+    let listaAssessoresArvore = [];
+    let listaCategoriasArvore = [];
 
-function carregarListasArvore() {
-  listaAssessoresArvore = getUnicos("Código Assessor");
-  listaCategoriasArvore = getUnicos("Categoria");
-}
+    function carregarListasArvore() {
+      listaAssessoresArvore = getUnicos("Código Assessor");
+      listaCategoriasArvore = getUnicos("Categoria");
+    }
 
-function mostrarSugestoesGeneric(inputEl, containerEl, listaValores) {
-  const termo = (inputEl.value || "").toLowerCase().trim();
-  containerEl.innerHTML = "";
-
-  let filtrada;
-  if (!termo) {
-    filtrada = listaValores;
-  } else {
-    filtrada = listaValores.filter(v =>
-      v.toString().toLowerCase().includes(termo)
-    );
-  }
-
-  if (!filtrada.length) {
-    containerEl.style.display = "none";
-    return;
-  }
-
-  filtrada.slice(0, 50).forEach(v => {
-    const item = document.createElement("button");
-    item.type = "button";
-    item.className = "list-group-item list-group-item-action py-1 px-2";
-    item.textContent = v;
-
-    item.addEventListener("click", () => {
-    inputEl.value = v;
-      containerEl.style.display = "none";
-      atualizarArvore();
-      montarResumoProdutos(); // atualiza resumo com o filtro atual
-
-  // se for o campo do assessor, atualiza a URL
-  if (inputEl.id === "assessor-arvore") {
-    atualizarURLComFiltroArvore();
-  }
-});
-
-
-    containerEl.appendChild(item);
-  });
-
-  containerEl.style.display = "block";
-}
-
-function configurarAutocompleteArvore() {
+    function atualizarURLComFiltroArvore() {
   const inputAss = document.getElementById("assessor-arvore");
-  const boxAss = document.getElementById("sugestoes-assessor-arvore");
-  const inputCat = document.getElementById("produto-arvore");
-  const boxCat = document.getElementById("sugestoes-produto-arvore");
+  if (!inputAss) return;
 
-  if (!inputAss || !boxAss || !inputCat || !boxCat) return;
+  const valorCompleto = inputAss.value.trim();
+  const url = new URL(window.location.href);
 
-  // Assessor
-  // Assessor
-  inputAss.addEventListener("input", () => {
-    mostrarSugestoesGeneric(inputAss, boxAss, listaAssessoresArvore);
-    atualizarArvore();
-    montarResumoProdutos();
-    atualizarURLComFiltroArvore();   // <<< NOVO
-  });
+  if (valorCompleto) {
+    // 🔑 pega só o código antes do " - "
+    const codigo = valorCompleto.split(" - ")[0].trim();
+    url.searchParams.set("cod", codigo);
+  } else {
+    url.searchParams.set("cod", "FeFePaFaHi");
+  }
 
-
-  inputAss.addEventListener("focus", () => {
-    mostrarSugestoesGeneric(inputAss, boxAss, listaAssessoresArvore);
-  });
-
-  // Categoria
-  inputCat.addEventListener("input", () => {
-    mostrarSugestoesGeneric(inputCat, boxCat, listaCategoriasArvore);
-    atualizarArvore();
-  });
-
-  inputCat.addEventListener("focus", () => {
-    mostrarSugestoesGeneric(inputCat, boxCat, listaCategoriasArvore);
-  });
-
-  // Fechar sugestões clicando fora
-  document.addEventListener("click", (e) => {
-    if (!boxAss.contains(e.target) && e.target !== inputAss) {
-      boxAss.style.display = "none";
-    }
-    if (!boxCat.contains(e.target) && e.target !== inputCat) {
-      boxCat.style.display = "none";
-    }
-  });
+  history.replaceState(null, "", url.toString());
 }
 
-// Gráfico: comissão por categoria (usando Valor Assessor)
-// Gráfico: comissão por categoria (usando Valor Assessor) – versão mais bonita
-// Gráfico: comissão por categoria (usando Valor Assessor) – barras pretas
-function montarGraficoCategoria(dadosFiltrados) {
-  const canvas = document.getElementById("chart-categoria");
+
+    function mostrarSugestoesGeneric(inputEl, containerEl, listaValores) {
+      const termo = (inputEl.value || "").toLowerCase().trim();
+      containerEl.innerHTML = "";
+
+      let filtrada;
+      if (!termo) filtrada = listaValores;
+      else filtrada = listaValores.filter(v => v.toString().toLowerCase().includes(termo));
+
+      if (!filtrada.length) {
+        containerEl.style.display = "none";
+        return;
+      }
+
+      filtrada.slice(0, 50).forEach(v => {
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = "list-group-item list-group-item-action py-1 px-2";
+        item.textContent = v;
+
+        item.addEventListener("click", () => {
+          inputEl.value = v;
+          containerEl.style.display = "none";
+
+          if (inputEl.id === "assessor-arvore") {
+            atualizarCategoriasPorAssessorAtual(); // 🔑 AQUI
+            atualizarURLComFiltroArvore();
+          }
+
+          atualizarArvore();
+          montarResumoProdutos();
+        });
+
+        containerEl.appendChild(item);
+      });
+
+      containerEl.style.display = "block";
+    }
+
+    function extrairCodigoAssessor(valor) {
+  return (valor || "").toString().split(" - ")[0].trim();
+}
+
+function getCategoriasPorAssessor(codAssessor) {
+  const cod = extrairCodigoAssessor(codAssessor).toLowerCase();
+  const set = new Set();
+
+  dfJuntar.forEach(row => {
+    const codLinha = extrairCodigoAssessor(row["Código Assessor"]).toLowerCase();
+    if (cod && codLinha !== cod) return;
+
+    const cat = row["Categoria"];
+    if (cat) set.add(cat);
+  });
+
+  return Array.from(set).sort();
+}
+
+
+
+    function configurarAutocompleteArvore() {
+      const inputAss = document.getElementById("assessor-arvore");
+      const boxAss = document.getElementById("sugestoes-assessor-arvore");
+      const inputCat = document.getElementById("produto-arvore");
+      const boxCat = document.getElementById("sugestoes-produto-arvore");
+
+      if (!inputAss || !boxAss || !inputCat || !boxCat) return;
+
+      inputAss.addEventListener("input", () => {
+        mostrarSugestoesGeneric(inputAss, boxAss, listaAssessoresArvore);
+
+        atualizarCategoriasPorAssessorAtual(); // 🔑 AQUI
+
+        atualizarArvore();
+        montarResumoProdutos();
+        atualizarURLComFiltroArvore();
+      });
+
+
+      inputAss.addEventListener("focus", () => {
+        mostrarSugestoesGeneric(inputAss, boxAss, listaAssessoresArvore);
+      });
+
+      inputCat.addEventListener("input", () => {
+        mostrarSugestoesGeneric(inputCat, boxCat, listaCategoriasArvore);
+        atualizarArvore();
+      });
+
+      inputCat.addEventListener("focus", () => {
+        mostrarSugestoesGeneric(inputCat, boxCat, listaCategoriasArvore);
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!boxAss.contains(e.target) && e.target !== inputAss) boxAss.style.display = "none";
+        if (!boxCat.contains(e.target) && e.target !== inputCat) boxCat.style.display = "none";
+      });
+    }
+
+    function montarGraficoCategoria(dadosFiltrados) {
+      const canvas = document.getElementById("chart-categoria");
+      if (!canvas) return;
+
+      if (!dadosFiltrados || !dadosFiltrados.length) {
+        if (chartCategoria) { chartCategoria.destroy(); chartCategoria = null; }
+        return;
+      }
+
+      const mapa = {};
+      dadosFiltrados.forEach(l => {
+        const cat = l["Categoria"] || "Sem categoria";
+        const valor = Number(l["Valor Assessor"] || 0);
+        if (!mapa[cat]) mapa[cat] = 0;
+        mapa[cat] += valor;
+      });
+
+      const entriesOrdenadas = Object.entries(mapa).sort((a, b) => b[1] - a[1]);
+      const TOP_N = 10;
+      const topEntries = entriesOrdenadas.slice(0, TOP_N);
+
+      const labels = topEntries.map(e => e[0]);
+      const valores = topEntries.map(e => e[1]);
+
+      if (chartCategoria) chartCategoria.destroy();
+
+      const ctx = canvas.getContext("2d");
+      chartCategoria = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Comissão por categoria (R$)",
+            data: valores,
+            backgroundColor: "#f3cb04",
+            hoverBackgroundColor: "#d9b404",
+            borderColor: "#c9ae03",
+            borderWidth: 1.2,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          responsive: true,
+          indexAxis: "y",
+          layout: { padding: 10 },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const valor = context.raw || 0;
+                  return " " + formatBRL(valor);
+                },
+                title: function(context) { return context[0].label || ""; }
+              }
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: { callback: function(value) { return formatBRL(value); } },
+              grid: { drawBorder: false, color: "rgba(148,163,184,0.25)" }
+            },
+            y: { grid: { display: false } }
+          },
+          elements: { bar: { borderRadius: 3, barThickness: 14, maxBarThickness: 18 } }
+        }
+      });
+    }
+
+    function filtrarDadosArvore(codAss, categoria) {
+      const cod = (codAss || "").toString().toLowerCase().trim();
+      const cat = (categoria || "").toString().toLowerCase().trim();
+
+      return dfJuntar.filter(l => {
+        const codLinha = (l["Código Assessor"] || "").toString().toLowerCase();
+        const catLinha = (l["Categoria"] || "").toString().toLowerCase();
+
+        const okAss = !cod || codLinha.includes(cod);
+        const okCat = !cat || catLinha.includes(cat);
+
+        return okAss && okCat;
+      });
+    }
+
+    function montarGraficoProduto(dadosFiltrados) {
+  const canvas = document.getElementById("chart-produto");
   if (!canvas) return;
 
-  // Se não houver dados, limpa o gráfico (se existir) e sai
   if (!dadosFiltrados || !dadosFiltrados.length) {
-    if (chartCategoria) {
-      chartCategoria.destroy();
-      chartCategoria = null;
-    }
+    if (chartProduto) { chartProduto.destroy(); chartProduto = null; }
     return;
   }
 
-  // Soma por categoria
   const mapa = {};
   dadosFiltrados.forEach(l => {
-    const cat = l["Categoria"] || "Sem categoria";
-    const valor = Number(l["Valor Assessor"] || 0); // Valor Assessor
-    if (!mapa[cat]) mapa[cat] = 0;
-    mapa[cat] += valor;
+    let prod = l["Produto"];
+
+    // trata vazio/nan
+    if (prod === null || prod === undefined) prod = "";
+    prod = String(prod).trim();
+    if (!prod || prod.toLowerCase() === "nan") prod = "Sem produto";
+
+    const valor = Number(l["Valor Assessor"] || 0);
+    if (!mapa[prod]) mapa[prod] = 0;
+    mapa[prod] += valor;
   });
 
-  // Ordena do maior para o menor e pega TOP 10
   const entriesOrdenadas = Object.entries(mapa).sort((a, b) => b[1] - a[1]);
+
   const TOP_N = 10;
   const topEntries = entriesOrdenadas.slice(0, TOP_N);
 
   const labels = topEntries.map(e => e[0]);
   const valores = topEntries.map(e => e[1]);
 
-  // Destroi gráfico anterior para recriar com novos dados
-  if (chartCategoria) {
-    chartCategoria.destroy();
-  }
+  if (chartProduto) chartProduto.destroy();
 
   const ctx = canvas.getContext("2d");
-
-  chartCategoria = new Chart(ctx, {
+  chartProduto = new Chart(ctx, {
     type: "bar",
     data: {
       labels: labels,
       datasets: [{
-    label: "Comissão por categoria (R$)",
-    data: valores,
-    backgroundColor: "#f3cb04",     // COR DOURADA
-    hoverBackgroundColor: "#d9b404", // DOURADO MAIS ESCURO NO HOVER
-    borderColor: "#c9ae03",
-    borderWidth: 1.2,
-    borderSkipped: false
-}]
-
+        label: "Comissão por produto (R$)",
+        data: valores,
+        backgroundColor: "#f3cb04",
+        hoverBackgroundColor: "#d9b404",
+        borderColor: "#c9ae03",
+        borderWidth: 1.2,
+        borderSkipped: false
+      }]
     },
     options: {
       responsive: true,
-      indexAxis: "y", // barras horizontais
-      layout: {
-        padding: 10
-      },
+      indexAxis: "y",
+      layout: { padding: 10 },
       plugins: {
-        legend: {
-          display: false,
-          labels: {
-            font: {
-              size: 13 // legenda (se usar)
-            }
-          }
-        },
+        legend: { display: false },
         tooltip: {
-          titleFont: {
-            size: 13
-          },
-          bodyFont: {
-            size: 13
-          },
           callbacks: {
             label: function(context) {
               const valor = context.raw || 0;
               return " " + formatBRL(valor);
             },
-            title: function(context) {
-              return context[0].label || "";
-            }
+            title: function(context) { return context[0].label || ""; }
           }
         }
       },
       scales: {
         x: {
           beginAtZero: true,
-          ticks: {
-            callback: function(value) {
-              return formatBRL(value);
-            },
-            font: {
-              size: 12   // aumenta fonte do eixo X
-            }
-          },
-          grid: {
-            drawBorder: false,
-            color: "rgba(148,163,184,0.25)"
-          }
+          ticks: { callback: function(value) { return formatBRL(value); } },
+          grid: { drawBorder: false, color: "rgba(148,163,184,0.25)" }
         },
-        y: {
-          ticks: {
-            font: {
-              size: 12   // aumenta fonte do eixo Y
-            }
-          },
-          grid: {
-            display: false
-          }
-        }
+        y: { grid: { display: false } }
       },
-      elements: {
-        bar: {
-          borderRadius: 3,
-          barThickness: 14,    // barras mais finas que o 20 original
-          maxBarThickness: 18
-        }
-      }
+      elements: { bar: { borderRadius: 3, barThickness: 14, maxBarThickness: 18 } }
     }
   });
 }
 
 
-
-    // filtra dfJuntar por assessor + categoria
-    function filtrarDadosArvore(codAss, categoria) {
-  const cod = (codAss || "").toString().toLowerCase().trim();
-  const cat = (categoria || "").toString().toLowerCase().trim();
-
-  return dfJuntar.filter(l => {
-    const codLinha = (l["Código Assessor"] || "").toString().toLowerCase();
-    const catLinha = (l["Categoria"] || "").toString().toLowerCase();
-
-    const okAss = !cod || codLinha.includes(cod);
-    const okCat = !cat || catLinha.includes(cat);
-
-    return okAss && okCat;
-  });
-}
-
-
-    // Resumo por categoria (ao invés de produto)
     function montarResumoProdutos() {
-  const alvo = document.getElementById("resumo-produtos");
-  if (!alvo) return;
-  alvo.innerHTML = "";
+      const alvo = document.getElementById("resumo-produtos");
+      if (!alvo) return;
+      alvo.innerHTML = "";
 
-  const inputAss = document.getElementById("assessor-arvore");
-  const codAss = inputAss ? inputAss.value : "";
+      const inputAss = document.getElementById("assessor-arvore");
+      const codAss = inputAss ? inputAss.value : "";
 
-  const dadosAss = filtrarDadosArvore(codAss, ""); // todas categorias
-  if (!dadosAss.length) {
-    alvo.innerHTML = '<div class="col-12 text-muted small">Nenhum dado para este filtro.</div>';
-    return;
-  }
+      const dadosAss = filtrarDadosArvore(codAss, "");
+      if (!dadosAss.length) {
+        alvo.innerHTML = '<div class="col-12 text-muted small">Nenhum dado para este filtro.</div>';
+        return;
+      }
 
-  const mapa = {};
-  dadosAss.forEach(l => {
-    const cat = l["Categoria"] || "Sem categoria";
-    if (!mapa[cat]) {
-      mapa[cat] = { receita: 0, assessor: 0 };
+      const mapa = {};
+      dadosAss.forEach(l => {
+        const cat = l["Categoria"] || "Sem categoria";
+        if (!mapa[cat]) mapa[cat] = { receita: 0, assessor: 0 };
+        mapa[cat].receita += Number(l["Receita Bruta"] || 0);
+        mapa[cat].assessor += Number(l["Valor Assessor"] || 0);
+      });
+
+      Object.entries(mapa).forEach(([categoria, vals]) => {
+        const col = document.createElement("div");
+        col.className = "col-md-3";
+        col.innerHTML = `
+          <div class="resumo-produto-card">
+            <div class="titulo-produto">${categoria}</div>
+            <small>Receita bruta</small><br>
+            <strong>${formatBRL(vals.receita)}</strong><br><br>
+            <small>Pago ao assessor</small><br>
+            <strong>${formatBRL(vals.assessor)}</strong>
+          </div>
+        `;
+        alvo.appendChild(col);
+      });
     }
-    mapa[cat].receita += Number(l["Receita Bruta"] || 0);
-    mapa[cat].assessor += Number(l["Valor Assessor"] || 0);
-  });
 
-  Object.entries(mapa).forEach(([categoria, vals]) => {
-    const col = document.createElement("div");
-    col.className = "col-md-3";
-    col.innerHTML = `
-      <div class="resumo-produto-card">
-        <div class="titulo-produto">${categoria}</div>
-        <small>Receita bruta</small><br>
-        <strong>${formatBRL(vals.receita)}</strong><br><br>
-        <small>Pago ao assessor</small><br>
-        <strong>${formatBRL(vals.assessor)}</strong>
-      </div>
-    `;
-    alvo.appendChild(col);
-  });
-}
-
-
-    // Árvore: lista dentro da receita agora é por CATEGORIA
     function montarArvoreCategoria(dadosFiltrados) {
-  const container = document.getElementById("arvore-container");
+      const container = document.getElementById("arvore-container");
 
-  if (!dadosFiltrados.length) {
-    container.innerHTML = '<p class="text-muted small">Nenhum dado encontrado para este filtro.</p>';
-    return;
-  }
+      if (!dadosFiltrados.length) {
+        container.innerHTML = '<p class="text-muted small">Nenhum dado encontrado para este filtro.</p>';
+        return;
+      }
 
-  let receitaBruta = 0;
-  let comissaoEscritorio = 0;
-  let valorImposto = 0;
-  let escritorioPosImposto = 0;
-  let valorAssessor = 0;
+      let receitaBruta = 0;
+      let comissaoEscritorio = 0;
+      let valorImposto = 0;
+      let escritorioPosImposto = 0;
+      let valorAssessor = 0;
 
-  const mapaCat = {};
+      const mapaCat = {};
 
-  dadosFiltrados.forEach(l => {
-    const receita = Number(l["Receita Bruta"] || 0);
-    receitaBruta += receita;
+      dadosFiltrados.forEach(l => {
+        const receita = Number(l["Receita Bruta"] || 0);
+        receitaBruta += receita;
 
-    const comissao = (l["Comissão Escritório"] != null
-      ? l["Comissão Escritório"]
-      : l["Comissão Escritório Tratada"]) || 0;
+        const comissao = (l["Comissão Escritório"] != null
+          ? l["Comissão Escritório"]
+          : l["Comissão Escritório Tratada"]) || 0;
 
-    comissaoEscritorio += Number(comissao);
-    valorImposto += Number(l["Valor Imposto"] || 0);
-    escritorioPosImposto += Number(l["Sem Imposto"] || 0);
-    valorAssessor += Number(l["Valor Assessor"] || 0);
+        comissaoEscritorio += Number(comissao);
+        valorImposto += Number(l["Valor Imposto"] || 0);
+        escritorioPosImposto += Number(l["Sem Imposto"] || 0);
+        valorAssessor += Number(l["Valor Assessor"] || 0);
 
-    const catNome = l["Categoria"] || "Sem categoria";
-    if (!mapaCat[catNome]) {
-      mapaCat[catNome] = 0;
-    }
-    mapaCat[catNome] += receita;
-  });
+        const catNome = l["Categoria"] || "Sem categoria";
+        if (!mapaCat[catNome]) mapaCat[catNome] = 0;
+        mapaCat[catNome] += receita;
+      });
 
-  if (!escritorioPosImposto && comissaoEscritorio) {
-    escritorioPosImposto = comissaoEscritorio - valorImposto;
-  }
+      if (!escritorioPosImposto && comissaoEscritorio) {
+        escritorioPosImposto = comissaoEscritorio - valorImposto;
+      }
 
-  const xpParte = receitaBruta - comissaoEscritorio;
-  const sobraEscritorio = escritorioPosImposto - valorAssessor;
+      const xpParte = receitaBruta - comissaoEscritorio;
+      const sobraEscritorio = escritorioPosImposto - valorAssessor;
 
-  const listaCategoriasHTML = Object.entries(mapaCat)
-    .sort((a, b) => b[1] - a[1])
-    .map(([categoria, valor]) => `
-      <div class="tree-prod-linha">
-        <span class="prod-nome">${categoria}</span>
-        <span class="prod-valor">${formatBRL(valor)}</span>
-      </div>
-    `)
-    .join("");
-
-  const resumoTopHTML = `
-    <div class="arvore-resumo-top">
-      <div class="arvore-resumo-pill">
-        <span class="label">Base</span>
-        <strong>${formatBRL(receitaBruta)}</strong>
-      </div>
-      <div class="arvore-resumo-pill">
-        <span class="label">XP</span>
-        <strong>${formatBRL(xpParte)}</strong>
-      </div>
-      <div class="arvore-resumo-pill">
-        <span class="label">Assessor</span>
-        <strong>${formatBRL(valorAssessor)}</strong>
-      </div>
-      <div class="arvore-resumo-pill">
-        <span class="label">Sobra Escritório</span>
-        <strong>${formatBRL(sobraEscritorio)}</strong>
-      </div>
-    </div>
-  `;
-
-  container.innerHTML = `
-    ${resumoTopHTML}
-
-    <div class="tree">
-      <div>
-        <!-- Nível 1: Categoria -->
-        <div class="tree-level">
-          <div class="tree-node node-produto">
-            <div class="tree-pill">Categoria</div>
-            <div class="tree-label">Receita bruta total</div>
-            <div class="tree-value">${formatBRL(receitaBruta)}</div>
-
-            ${listaCategoriasHTML ? `
-              <div class="tree-sublist">
-                ${listaCategoriasHTML}
-              </div>
-            ` : ""}
+      const listaCategoriasHTML = Object.entries(mapaCat)
+        .sort((a, b) => b[1] - a[1])
+        .map(([categoria, valor]) => `
+          <div class="tree-prod-linha">
+            <span class="prod-nome">${categoria}</span>
+            <span class="prod-valor">${formatBRL(valor)}</span>
           </div>
+        `).join("");
+
+      const resumoTopHTML = `
+        <div class="arvore-resumo-top">
+          <div class="arvore-resumo-pill"><span class="label">Base</span><strong>${formatBRL(receitaBruta)}</strong></div>
+          <div class="arvore-resumo-pill"><span class="label">XP</span><strong>${formatBRL(xpParte)}</strong></div>
+          <div class="arvore-resumo-pill"><span class="label">Assessor</span><strong>${formatBRL(valorAssessor)}</strong></div>
+          <div class="arvore-resumo-pill"><span class="label">Sobra Escritório</span><strong>${formatBRL(sobraEscritorio)}</strong></div>
         </div>
-
-        <!-- Nível 2: XP e Escritório (bruto) -->
-        <div class="tree-level">
-          <div class="tree-connector">
-            <div class="tree-node node-xp">
-              <div class="tree-pill">XP</div>
-              <div class="tree-label">Parte da XP</div>
-              <div class="tree-value">${formatBRL(xpParte)}</div>
-            </div>
-          </div>
-          <div class="tree-connector">
-            <div class="tree-node node-escritorio-bruto">
-              <div class="tree-pill">Escritório</div>
-              <div class="tree-label">Comissão escritório (bruto)</div>
-              <div class="tree-value">${formatBRL(comissaoEscritorio)}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Nível 3: Imposto / Escritório pós imposto -->
-        <div class="tree-level">
-          <div class="tree-connector">
-            <div class="tree-node node-imposto">
-              <div class="tree-pill">Imposto</div>
-              <div class="tree-label">Imposto / despesa</div>
-              <div class="tree-value">${formatBRL(valorImposto)}</div>
-            </div>
-          </div>
-          <div class="tree-connector">
-            <div class="tree-node node-escritorio-pos">
-              <div class="tree-pill">Escritório</div>
-              <div class="tree-label">Escritório pós imposto</div>
-              <div class="tree-value">${formatBRL(escritorioPosImposto)}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Nível 4: Assessor / Sobra Escritório -->
-        <div class="tree-level">
-          <div class="tree-connector">
-            <div class="tree-node node-assessor">
-              <div class="tree-pill">Assessor</div>
-              <div class="tree-label">Pago ao assessor</div>
-              <div class="tree-value">${formatBRL(valorAssessor)}</div>
-            </div>
-          </div>
-          <div class="tree-connector">
-            <div class="tree-node node-sobra">
-              <div class="tree-pill">Sobra</div>
-              <div class="tree-label">Sobra escritório</div>
-              <div class="tree-value">${formatBRL(sobraEscritorio)}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-
-    // Tabela plana filtrada (igual, só reaproveitando)
-    // TABELA PLANA FILTRADA (Tabela detalhada) COM COLUNAS ORDENADAS
-function montarTabelaArvore(dadosFiltrados) {
-  const wrapper = document.getElementById("tabela-arvore-wrapper");
-  if (!wrapper) return;
-
-  if (!dadosFiltrados || !dadosFiltrados.length) {
-    wrapper.innerHTML = '<p class="text-muted small mb-0">Nenhuma linha para este filtro.</p>';
-    return;
-  }
-
-  // pega todas as colunas existentes nas linhas retornadas
-  const todasColunas = Object.keys(dadosFiltrados[0]);
-
-  // colunas na ordem desejada (mas só as que existem de fato)
-  const colunasPrincipais = COLUNAS_ORDENADAS.filter(c =>
-    todasColunas.includes(c)
-  );
-
-  // se tiver alguma coluna extra que não está na lista padrão, joga pro final
-  const colunasExtras = todasColunas.filter(c =>
-    !COLUNAS_ORDENADAS.includes(c)
-  );
-
-  const colunas = [...colunasPrincipais, ...colunasExtras];
-
-  // monta o cabeçalho
-  let thead = "<thead><tr>" +
-    colunas.map(c => `<th>${c}</th>`).join("") +
-    "</tr></thead>";
-
-  // monta o corpo
-  let tbody = "<tbody>" +
-    dadosFiltrados.map(linha => {
-      return "<tr>" + colunas.map(c => {
-        const valor = (linha[c] === null || linha[c] === undefined) ? "" : linha[c];
-        return `<td>${valor}</td>`;
-      }).join("") + "</tr>";
-    }).join("") +
-    "</tbody>";
-
-  // injeta a tabela no wrapper
-  wrapper.innerHTML = `
-    <table class="table table-striped table-bordered table-sm">
-      ${thead}
-      ${tbody}
-    </table>
-  `;
-}
-
-
-    // === TABELA HIERÁRQUICA: Assessor → Categoria → Produto → Operações ===
-    // === TABELA HIERÁRQUICA: Assessor → Categoria → Produto → Operações ===
-// === TABELA HIERÁRQUICA: Assessor → Categoria → Produto → Operações ===
-// === TABELA HIERÁRQUICA: Assessor → Categoria → Produto → Operações ===
-function montarTabelaHierarquica(dadosFiltrados) {
-  const wrapper = document.getElementById("tabela-hierarquica-wrapper");
-  if (!wrapper) return;
-
-  if (!dadosFiltrados || !dadosFiltrados.length) {
-    wrapper.innerHTML = '<p class="text-muted small mb-0">Nenhum dado para este filtro.</p>';
-    return;
-  }
-
-  // Agrupa: Assessor -> Categoria -> Produto -> Operações
-  const agrupado = {};
-
-  dadosFiltrados.forEach(linha => {
-    const ass = linha["Código Assessor"] || "Sem código";
-    const cat = linha["Categoria"] || "Sem categoria";
-    let prodRaw = linha["Produto"];
-
-    // ❗ TRATAMENTO FINAL DE PRODUTO ❗
-    // Se Produto estiver vazio, null, undefined, "NaN", número NaN → vira ""
-    if (
-      prodRaw === null ||
-      prodRaw === undefined ||
-      String(prodRaw).trim() === "" ||
-      String(prodRaw).toLowerCase() === "nan"
-    ) {
-      prodRaw = "";
-    }
-
-    // Produto só é considerado existente se tiver nome real
-    const temProdutoEspecifico = prodRaw !== "";
-
-    // Para agrupar internamente
-    const prod = temProdutoEspecifico ? prodRaw : "Sem produto";
-
-    const valorAssessor = Number(linha["Valor Assessor"] || 0);
-
-    // --- monta estrutura do assessor ---
-    if (!agrupado[ass]) {
-      agrupado[ass] = {
-        totalAssessor: 0,
-        categorias: {}
-      };
-    }
-    agrupado[ass].totalAssessor += valorAssessor;
-
-    // --- monta estrutura da categoria ---
-    if (!agrupado[ass].categorias[cat]) {
-      agrupado[ass].categorias[cat] = {
-        totalCategoria: 0,
-        produtos: {},
-        linhasCategoria: [],
-        temProdutoEspecifico: false
-      };
-    }
-
-    const dadosCat = agrupado[ass].categorias[cat];
-
-    dadosCat.totalCategoria += valorAssessor;
-    dadosCat.linhasCategoria.push(linha);
-
-    if (temProdutoEspecifico) {
-      dadosCat.temProdutoEspecifico = true;
-    }
-
-    // --- monta estrutura do produto ---
-    if (!dadosCat.produtos[prod]) {
-      dadosCat.produtos[prod] = {
-        totalProduto: 0,
-        linhas: []
-      };
-    }
-
-    dadosCat.produtos[prod].totalProduto += valorAssessor;
-    dadosCat.produtos[prod].linhas.push(linha);
-  });
-
-  // === RENDERIZAÇÃO ===
-  const assessoresOrdenados = Object.keys(agrupado).sort((a, b) => a.localeCompare(b));
-
-  let html = '<div class="accordion" id="accordionHierarquicoAssessor">';
-
-  assessoresOrdenados.forEach((assessor, idxAss) => {
-    const dadosAss = agrupado[assessor];
-    const idCollapseAss = `collapseAss${idxAss}`;
-    const idHeadingAss = `headingAss${idxAss}`;
-    const idAccordionCategorias = `accordionAss${idxAss}Categorias`;
-
-    html += `
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="${idHeadingAss}">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#${idCollapseAss}"
-            aria-expanded="false"
-            aria-controls="${idCollapseAss}"
-          >
-            <div class="d-flex flex-column">
-              <span><strong>Assessor:</strong> ${assessor}</span>
-              <small class="text-muted">Total pago ao assessor: <strong>${formatBRL(dadosAss.totalAssessor)}</strong></small>
-            </div>
-          </button>
-        </h2>
-
-        <div id="${idCollapseAss}" class="accordion-collapse collapse" 
-          aria-labelledby="${idHeadingAss}" 
-          data-bs-parent="#accordionHierarquicoAssessor">
-          
-          <div class="accordion-body">
-            <div class="accordion" id="${idAccordionCategorias}">
-    `;
-
-    // --- CATEGORIAS ---
-    const categoriasOrdenadas = Object.keys(dadosAss.categorias).sort((a, b) => a.localeCompare(b));
-
-    categoriasOrdenadas.forEach((categoria, idxCat) => {
-      const dadosCat = dadosAss.categorias[categoria];
-      const idCollapseCat = `collapseCat${idxAss}_${idxCat}`;
-      const idHeadingCat = `headingCat${idxAss}_${idxCat}`;
-      const idAccordionProdutos = `accordionAss${idxAss}_Cat${idxCat}Prod`;
-
-      html += `
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="${idHeadingCat}">
-            <button
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#${idCollapseCat}"
-              aria-expanded="false"
-              aria-controls="${idCollapseCat}"
-            >
-              <div class="d-flex flex-column">
-                <span><strong>Categoria:</strong> ${categoria}</span>
-                <small class="text-muted">Total pago nesta categoria: <strong>${formatBRL(dadosCat.totalCategoria)}</strong></small>
-              </div>
-            </button>
-          </h2>
-
-          <div id="${idCollapseCat}" class="accordion-collapse collapse" 
-            aria-labelledby="${idHeadingCat}" 
-            data-bs-parent="#${idAccordionCategorias}">
-            
-            <div class="accordion-body">
       `;
 
-      // 🚨 CASO 1: NÃO EXISTE NENHUM PRODUTO COM NOME → NÃO MOSTRA NÍVEL PRODUTO
-      if (!dadosCat.temProdutoEspecifico) {
-        const linhas = dadosCat.linhasCategoria;
+      container.innerHTML = `
+        ${resumoTopHTML}
 
-        if (linhas.length) {
-          html += gerarTabelaHTML(linhas);
-        } else {
-          html += `<p class="text-muted small">Sem operações nesta categoria.</p>`;
+        <div class="tree">
+          <div>
+            <div class="tree-level">
+              <div class="tree-node node-produto">
+                <div class="tree-pill">Categoria</div>
+                <div class="tree-label">Receita bruta total</div>
+                <div class="tree-value">${formatBRL(receitaBruta)}</div>
+
+                ${listaCategoriasHTML ? `<div class="tree-sublist">${listaCategoriasHTML}</div>` : ""}
+              </div>
+            </div>
+
+            <div class="tree-level">
+              <div class="tree-connector">
+                <div class="tree-node node-xp">
+                  <div class="tree-pill">XP</div>
+                  <div class="tree-label">Parte da XP</div>
+                  <div class="tree-value">${formatBRL(xpParte)}</div>
+                </div>
+              </div>
+              <div class="tree-connector">
+                <div class="tree-node node-escritorio-bruto">
+                  <div class="tree-pill">Escritório</div>
+                  <div class="tree-label">Comissão escritório (bruto)</div>
+                  <div class="tree-value">${formatBRL(comissaoEscritorio)}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tree-level">
+              <div class="tree-connector">
+                <div class="tree-node node-imposto">
+                  <div class="tree-pill">Imposto</div>
+                  <div class="tree-label">Imposto / despesa</div>
+                  <div class="tree-value">${formatBRL(valorImposto)}</div>
+                </div>
+              </div>
+              <div class="tree-connector">
+                <div class="tree-node node-escritorio-pos">
+                  <div class="tree-pill">Escritório</div>
+                  <div class="tree-label">Escritório pós imposto</div>
+                  <div class="tree-value">${formatBRL(escritorioPosImposto)}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tree-level">
+              <div class="tree-connector">
+                <div class="tree-node node-assessor">
+                  <div class="tree-pill">Assessor</div>
+                  <div class="tree-label">Pago ao assessor</div>
+                  <div class="tree-value">${formatBRL(valorAssessor)}</div>
+                </div>
+              </div>
+            </div>
+
+      `;
+    }
+
+    function montarTabelaArvore(dadosFiltrados) {
+      const wrapper = document.getElementById("tabela-arvore-wrapper");
+      if (!wrapper) return;
+
+      if (!dadosFiltrados || !dadosFiltrados.length) {
+        wrapper.innerHTML = '<p class="text-muted small mb-0">Nenhuma linha para este filtro.</p>';
+        return;
+      }
+
+      const todasColunas = Object.keys(dadosFiltrados[0]);
+      const colunasPrincipais = COLUNAS_ORDENADAS.filter(c => todasColunas.includes(c));
+      const colunasExtras = todasColunas.filter(c => !COLUNAS_ORDENADAS.includes(c));
+      const colunas = [...colunasPrincipais, ...colunasExtras];
+
+      let thead = "<thead><tr>" + colunas.map(c => `<th>${c}</th>`).join("") + "</tr></thead>";
+      let tbody = "<tbody>" + dadosFiltrados.map(linha => {
+        return "<tr>" + colunas.map(c => {
+          const valor = (linha[c] === null || linha[c] === undefined) ? "" : linha[c];
+          return `<td>${valor}</td>`;
+        }).join("") + "</tr>";
+      }).join("") + "</tbody>";
+
+      wrapper.innerHTML = `
+        <table class="table table-striped table-bordered table-sm">
+          ${thead}
+          ${tbody}
+        </table>
+      `;
+    }
+
+    function gerarTabelaHTML(linhas) {
+      if (!linhas.length) return "";
+
+      const todasColunas = Object.keys(linhas[0]);
+      const colunasPrincipais = COLUNAS_ORDENADAS.filter(c => todasColunas.includes(c));
+      const colunasExtras = todasColunas.filter(c => !COLUNAS_ORDENADAS.includes(c));
+      const colunas = [...colunasPrincipais, ...colunasExtras];
+
+      let thead = "<thead><tr>" + colunas.map(c => `<th>${c}</th>`).join("") + "</tr></thead>";
+      let tbody = "<tbody>" + linhas.map(linha => {
+        return "<tr>" + colunas.map(c => {
+          const v = (linha[c] === null || linha[c] === undefined) ? "" : linha[c];
+          return `<td>${v}</td>`;
+        }).join("") + "</tr>";
+      }).join("") + "</tbody>";
+
+      return `
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-sm">
+            ${thead}
+            ${tbody}
+          </table>
+        </div>
+      `;
+    }
+
+    function montarTabelaHierarquica(dadosFiltrados) {
+      const wrapper = document.getElementById("tabela-hierarquica-wrapper");
+      if (!wrapper) return;
+
+      if (!dadosFiltrados || !dadosFiltrados.length) {
+        wrapper.innerHTML = '<p class="text-muted small mb-0">Nenhum dado para este filtro.</p>';
+        return;
+      }
+
+      const agrupado = {};
+      dadosFiltrados.forEach(linha => {
+        const ass = linha["Código Assessor"] || "Sem código";
+        const cat = linha["Categoria"] || "Sem categoria";
+        let prodRaw = linha["Produto"];
+
+        if (prodRaw === null || prodRaw === undefined || String(prodRaw).trim() === "" || String(prodRaw).toLowerCase() === "nan") {
+          prodRaw = "";
         }
 
-      } else {
-        // 🚨 CASO 2: EXISTEM PRODUTOS COM NOME → MOSTRA NÍVEL PRODUTO NORMAL
+        const temProdutoEspecifico = prodRaw !== "";
+        const prod = temProdutoEspecifico ? prodRaw : "Sem produto";
+        const valorAssessor = Number(linha["Valor Assessor"] || 0);
 
-        html += `<div class="accordion" id="${idAccordionProdutos}">`;
+        if (!agrupado[ass]) agrupado[ass] = { totalAssessor: 0, categorias: {} };
+        agrupado[ass].totalAssessor += valorAssessor;
 
-        const produtosOrdenados =
-          Object.keys(dadosCat.produtos).filter(p => p !== "Sem produto")
-                .sort((a, b) => a.localeCompare(b));
-
-        // Se houver linhas sem produto mas a categoria tem produtos com nome,
-        // mostramos "Outros" ao invés de "Sem produto".
-        if (dadosCat.produtos["Sem produto"]) {
-          produtosOrdenados.push("Outros");
-          dadosCat.produtos["Outros"] = dadosCat.produtos["Sem produto"];
-          delete dadosCat.produtos["Sem produto"];
+        if (!agrupado[ass].categorias[cat]) {
+          agrupado[ass].categorias[cat] = {
+            totalCategoria: 0,
+            produtos: {},
+            linhasCategoria: [],
+            temProdutoEspecifico: false
+          };
         }
 
-        produtosOrdenados.forEach((produto, idxProd) => {
-          const dadosProd = dadosCat.produtos[produto];
-          const idCollapseProd = `collapseProd${idxAss}_${idxCat}_${idxProd}`;
-          const idHeadingProd = `headingProd${idxAss}_${idxCat}_${idxProd}`;
+        const dadosCat = agrupado[ass].categorias[cat];
+        dadosCat.totalCategoria += valorAssessor;
+        dadosCat.linhasCategoria.push(linha);
+        if (temProdutoEspecifico) dadosCat.temProdutoEspecifico = true;
+
+        if (!dadosCat.produtos[prod]) dadosCat.produtos[prod] = { totalProduto: 0, linhas: [] };
+        dadosCat.produtos[prod].totalProduto += valorAssessor;
+        dadosCat.produtos[prod].linhas.push(linha);
+      });
+
+      const assessoresOrdenados = Object.keys(agrupado).sort((a, b) => a.localeCompare(b));
+      let html = '<div class="accordion" id="accordionHierarquicoAssessor">';
+
+      assessoresOrdenados.forEach((assessor, idxAss) => {
+        const dadosAss = agrupado[assessor];
+        const idCollapseAss = `collapseAss${idxAss}`;
+        const idHeadingAss = `headingAss${idxAss}`;
+        const idAccordionCategorias = `accordionAss${idxAss}Categorias`;
+
+        html += `
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="${idHeadingAss}">
+              <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#${idCollapseAss}"
+                aria-expanded="false" aria-controls="${idCollapseAss}">
+                <div class="d-flex flex-column">
+                  <span><strong>Assessor:</strong> ${assessor}</span>
+                  <small class="text-muted">Total pago ao assessor: <strong>${formatBRL(dadosAss.totalAssessor)}</strong></small>
+                </div>
+              </button>
+            </h2>
+
+            <div id="${idCollapseAss}" class="accordion-collapse collapse"
+              aria-labelledby="${idHeadingAss}"
+              data-bs-parent="#accordionHierarquicoAssessor">
+
+              <div class="accordion-body">
+                <div class="accordion" id="${idAccordionCategorias}">
+        `;
+
+        const categoriasOrdenadas = Object.keys(dadosAss.categorias).sort((a, b) => a.localeCompare(b));
+        categoriasOrdenadas.forEach((categoria, idxCat) => {
+          const dadosCat = dadosAss.categorias[categoria];
+          const idCollapseCat = `collapseCat${idxAss}_${idxCat}`;
+          const idHeadingCat = `headingCat${idxAss}_${idxCat}`;
+          const idAccordionProdutos = `accordionAss${idxAss}_Cat${idxCat}Prod`;
 
           html += `
             <div class="accordion-item">
-              <h2 class="accordion-header" id="${idHeadingProd}">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#${idCollapseProd}"
-                  aria-expanded="false"
-                  aria-controls="${idCollapseProd}"
-                >
+              <h2 class="accordion-header" id="${idHeadingCat}">
+                <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#${idCollapseCat}"
+                  aria-expanded="false" aria-controls="${idCollapseCat}">
                   <div class="d-flex flex-column">
-                    <span><strong>Produto:</strong> ${produto}</span>
-                    <small class="text-muted">Total pago neste produto: <strong>${formatBRL(dadosProd.totalProduto)}</strong></small>
+                    <span><strong>Categoria:</strong> ${categoria}</span>
+                    <small class="text-muted">Total pago nesta categoria: <strong>${formatBRL(dadosCat.totalCategoria)}</strong></small>
                   </div>
                 </button>
               </h2>
 
-              <div id="${idCollapseProd}" class="accordion-collapse collapse" 
-                aria-labelledby="${idHeadingProd}" 
-                data-bs-parent="#${idAccordionProdutos}">
-                
+              <div id="${idCollapseCat}" class="accordion-collapse collapse"
+                aria-labelledby="${idHeadingCat}"
+                data-bs-parent="#${idAccordionCategorias}">
+
                 <div class="accordion-body">
-                  ${gerarTabelaHTML(dadosProd.linhas)}
+          `;
+
+          if (!dadosCat.temProdutoEspecifico) {
+            const linhas = dadosCat.linhasCategoria;
+            html += linhas.length ? gerarTabelaHTML(linhas) : `<p class="text-muted small">Sem operações nesta categoria.</p>`;
+          } else {
+            html += `<div class="accordion" id="${idAccordionProdutos}">`;
+
+            const produtosOrdenados = Object.keys(dadosCat.produtos).filter(p => p !== "Sem produto").sort((a, b) => a.localeCompare(b));
+            if (dadosCat.produtos["Sem produto"]) {
+              produtosOrdenados.push("Outros");
+              dadosCat.produtos["Outros"] = dadosCat.produtos["Sem produto"];
+              delete dadosCat.produtos["Sem produto"];
+            }
+
+            produtosOrdenados.forEach((produto, idxProd) => {
+              const dadosProd = dadosCat.produtos[produto];
+              const idCollapseProd = `collapseProd${idxAss}_${idxCat}_${idxProd}`;
+              const idHeadingProd = `headingProd${idxAss}_${idxCat}_${idxProd}`;
+
+              html += `
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="${idHeadingProd}">
+                    <button class="accordion-button collapsed" type="button"
+                      data-bs-toggle="collapse" data-bs-target="#${idCollapseProd}"
+                      aria-expanded="false" aria-controls="${idCollapseProd}">
+                      <div class="d-flex flex-column">
+                        <span><strong>Produto:</strong> ${produto}</span>
+                        <small class="text-muted">Total pago neste produto: <strong>${formatBRL(dadosProd.totalProduto)}</strong></small>
+                      </div>
+                    </button>
+                  </h2>
+
+                  <div id="${idCollapseProd}" class="accordion-collapse collapse"
+                    aria-labelledby="${idHeadingProd}"
+                    data-bs-parent="#${idAccordionProdutos}">
+
+                    <div class="accordion-body">
+                      ${gerarTabelaHTML(dadosProd.linhas)}
+                    </div>
+                  </div>
+                </div>
+              `;
+            });
+
+            html += `</div>`;
+          }
+
+          html += `
                 </div>
               </div>
             </div>
           `;
         });
 
-        html += `</div>`; // fim accordion produtos
-      }
-
-      html += `
+        html += `
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      `;
-    });
+        `;
+      });
 
-    html += `
-            </div> <!-- fim accordion categorias -->
-          </div>
-        </div>
-      </div>
-    `;
-  });
+      html += "</div>";
+      wrapper.innerHTML = html;
+    }
 
-  html += "</div>";
-  wrapper.innerHTML = html;
-}
-
-// === Função auxiliar para montar a tabela (mesmo padrão utilizado antes)
-function gerarTabelaHTML(linhas) {
-  if (!linhas.length) return "";
-
-  const todasColunas = Object.keys(linhas[0]);
-  const colunasPrincipais = COLUNAS_ORDENADAS.filter(c =>
-    todasColunas.includes(c)
-  );
-  const colunasExtras = todasColunas.filter(c =>
-    !COLUNAS_ORDENADAS.includes(c)
-  );
-  const colunas = [...colunasPrincipais, ...colunasExtras];
-
-  let thead = "<thead><tr>" +
-    colunas.map(c => `<th>${c}</th>`).join("") +
-    "</tr></thead>";
-
-  let tbody = "<tbody>" +
-    linhas
-      .map(linha => {
-        return (
-          "<tr>" +
-          colunas
-            .map(c => {
-              const v =
-                linha[c] === null || linha[c] === undefined ? "" : linha[c];
-              return `<td>${v}</td>`;
-            })
-            .join("") +
-          "</tr>"
-        );
-      })
-      .join("") +
-    "</tbody>";
-
-  return `
-    <div class="table-responsive">
-      <table class="table table-striped table-bordered table-sm">
-        ${thead}
-        ${tbody}
-      </table>
-    </div>
-  `;
-}
-
-
-
-
-    // Atualiza tudo quando clica no botão
     function atualizarArvore() {
+      const inputAss = document.getElementById("assessor-arvore");
+      const inputCat = document.getElementById("produto-arvore");
+      const textoFiltro = document.getElementById("texto-filtro-arvore");
+
+      const codAss = inputAss ? inputAss.value : "";
+      const categoria = inputCat ? inputCat.value : "";
+
+      const filtrado = filtrarDadosArvore(codAss, categoria);
+      dadosArvoreAtual = filtrado;
+
+      montarArvoreCategoria(filtrado);
+      montarTabelaArvore(filtrado);
+      montarTabelaHierarquica(filtrado);
+      montarGraficoCategoria(filtrado);
+      montarGraficoProduto(filtrado);
+
+
+      if (textoFiltro) {
+        textoFiltro.textContent =
+          "Assessor: " + (codAss ? codAss : "Todos") +
+          "  |  Categoria: " + (categoria ? categoria : "Todos");
+      }
+    }
+    function atualizarCategoriasPorAssessorAtual() {
   const inputAss = document.getElementById("assessor-arvore");
   const inputCat = document.getElementById("produto-arvore");
-  const textoFiltro = document.getElementById("texto-filtro-arvore");
+  if (!inputCat) return;
 
   const codAss = inputAss ? inputAss.value : "";
-  const categoria = inputCat ? inputCat.value : "";
+  listaCategoriasArvore = getCategoriasPorAssessor(codAss);
 
-  const filtrado = filtrarDadosArvore(codAss, categoria);
-
-  // guarda o resultado filtrado para exportar depois
-  dadosArvoreAtual = filtrado;
-
-  montarArvoreCategoria(filtrado);
-  montarTabelaArvore(filtrado);
-  montarTabelaHierarquica(filtrado);
-  montarGraficoCategoria(filtrado);   // <<< NOVO
-
-
-  if (textoFiltro) {
-    textoFiltro.textContent =
-      "Assessor: " + (codAss ? codAss : "Todos") +
-      "  |  Categoria: " + (categoria ? categoria : "Todos");
+  // se a categoria atual não existir para esse assessor, limpa
+  if (inputCat.value) {
+    const atual = inputCat.value.toLowerCase();
+    const existe = listaCategoriasArvore.some(c => c.toLowerCase() === atual);
+    if (!existe) inputCat.value = "";
   }
 }
 
-function exportarTabelaArvoreCSV() {
-  if (!dadosArvoreAtual || !dadosArvoreAtual.length) {
-    alert("Não há dados filtrados para exportar.");
-    return;
-  }
 
-  // Mesma lógica de colunas usada em montarTabelaArvore
-  const todasColunas = Object.keys(dadosArvoreAtual[0]);
-  const colunasPrincipais = COLUNAS_ORDENADAS.filter(c =>
-    todasColunas.includes(c)
-  );
-  const colunasExtras = todasColunas.filter(c =>
-    !COLUNAS_ORDENADAS.includes(c)
-  );
-  const colunas = [...colunasPrincipais, ...colunasExtras];
-
-  const linhasCSV = [];
-
-  // Cabeçalho
-  linhasCSV.push(colunas.join(";"));
-
-  // Linhas
-  dadosArvoreAtual.forEach(linha => {
-    const campos = colunas.map(c => {
-      let valor = linha[c];
-      if (valor === null || valor === undefined) {
-        valor = "";
+    function exportarTabelaArvoreCSV() {
+      if (!dadosArvoreAtual || !dadosArvoreAtual.length) {
+        alert("Não há dados filtrados para exportar.");
+        return;
       }
-      valor = String(valor);
-      if (valor.includes(";") || valor.includes('"')) {
-        valor = '"' + valor.replace(/"/g, '""') + '"';
-      }
-      return valor;
-    });
-    linhasCSV.push(campos.join(";"));
-  });
 
-  const blob = new Blob([linhasCSV.join("\n")], {
-    type: "text/csv;charset=utf-8;"
-  });
+      const todasColunas = Object.keys(dadosArvoreAtual[0]);
+      const colunasPrincipais = COLUNAS_ORDENADAS.filter(c => todasColunas.includes(c));
+      const colunasExtras = todasColunas.filter(c => !COLUNAS_ORDENADAS.includes(c));
+      const colunas = [...colunasPrincipais, ...colunasExtras];
 
-  const link = document.createElement("a");
-  const url = URL.createObjectURL(blob);
-  link.href = url;
-  link.download = "tabela_detalhada_arvore.csv";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-}
-   document.addEventListener("DOMContentLoaded", () => {
-  carregarListasArvore();
-  configurarAutocompleteArvore();
+      const linhasCSV = [];
+      linhasCSV.push(colunas.join(";"));
 
-  const inputAss = document.getElementById("assessor-arvore");
-  const url = new URL(window.location.href);
-  const codParam = url.searchParams.get("cod");
+      dadosArvoreAtual.forEach(linha => {
+        const campos = colunas.map(c => {
+          let valor = linha[c];
+          if (valor === null || valor === undefined) valor = "";
+          valor = String(valor);
+          if (valor.includes(";") || valor.includes('"')) valor = '"' + valor.replace(/"/g, '""') + '"';
+          return valor;
+        });
+        linhasCSV.push(campos.join(";"));
+      });
 
-  if (inputAss) {
-    if (codParam && codParam !== "FeFePaFaHi") {
-      inputAss.value = codParam;   // já entra filtrado se tiver cod na URL
-    } else {
-      inputAss.value = "";
+      const blob = new Blob([linhasCSV.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.href = url;
+      link.download = "tabela_detalhada_arvore.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     }
-  }
 
-  const btnArvore = document.getElementById("btn-arvore");
+    function limparFiltroArvore(tipo) {
+      const inputAss = document.getElementById("assessor-arvore");
+      const inputCat = document.getElementById("produto-arvore");
+      const boxAss = document.getElementById("sugestoes-assessor-arvore");
+      const boxCat = document.getElementById("sugestoes-produto-arvore");
 
-  montarResumoProdutos();
-  atualizarArvore();
+      if (tipo === "assessor" && inputAss) inputAss.value = "";
+      if (tipo === "categoria" && inputCat) inputCat.value = "";
+      if (tipo === "todos") {
+        if (inputAss) inputAss.value = "";
+        if (inputCat) inputCat.value = "";
+      }
 
-  if (btnArvore) {
-    btnArvore.addEventListener("click", () => {
+      if (boxAss) boxAss.style.display = "none";
+      if (boxCat) boxCat.style.display = "none";
+
+      atualizarURLComFiltroArvore();
       atualizarArvore();
       montarResumoProdutos();
-    });
-  }
+    }
 
-  const btnExport = document.getElementById("btn-exportar-tabela-arvore");
-  if (btnExport) {
-    btnExport.addEventListener("click", () => {
-      exportarTabelaArvoreCSV();
-    });
-  }
-});
+    document.addEventListener("DOMContentLoaded", () => {
 
+        // 🔑 INICIALIZA LISTAS E AUTOCOMPLETE
+        carregarListasArvore();
+        configurarAutocompleteArvore();
 
+        // 🔑 LÊ O CÓDIGO DA URL
+        const url = new URL(window.location.href);
+        const codParam = url.searchParams.get("cod");
 
-  // 🔽🔽🔽 ADICIONE ESTE BLOCO AQUI 🔽🔽🔽
+        const inputAss = document.getElementById("assessor-arvore");
+        if (inputAss && codParam && codParam !== "FeFePaFaHi") {
+          inputAss.value = codParam;
+        }
 
-  const collapseResumo = document.getElementById("resumo-categoria-collapse");
-  const iconeResumo = document.getElementById("icone-resumo-categoria");
+        // 🔑 ATUALIZA CATEGORIAS CONFORME ASSESSOR DA URL
+        atualizarCategoriasPorAssessorAtual();
 
-  if (collapseResumo) {
-    collapseResumo.addEventListener("show.bs.collapse", () => {
-      iconeResumo.textContent = "▾"; // seta para baixo
-    });
+        // 🔑 MONTA TUDO
+        montarResumoProdutos();
+        atualizarArvore();
 
-    collapseResumo.addEventListener("hide.bs.collapse", () => {
-      iconeResumo.textContent = "▸"; // seta para a direita
-    });
-  }
+        // ===== BOTÕES =====
+        const btnExport = document.getElementById("btn-exportar-tabela-arvore");
+        if (btnExport) btnExport.addEventListener("click", exportarTabelaArvoreCSV);
 
-  // 🔼🔼🔼 FIM DO BLOCO QUE VOCÊ ADICIONA 🔼🔼🔼
+        const btnLimparAss = document.getElementById("btn-limpar-assessor-arvore");
+        const btnLimparCat = document.getElementById("btn-limpar-categoria-arvore");
+        if (btnLimparAss) btnLimparAss.addEventListener("click", () => limparFiltroArvore("assessor"));
+        if (btnLimparCat) btnLimparCat.addEventListener("click", () => limparFiltroArvore("categoria"));
+
+        const collapseResumo = document.getElementById("resumo-categoria-collapse");
+        const iconeResumo = document.getElementById("icone-resumo-categoria");
+        if (collapseResumo) {
+          collapseResumo.addEventListener("show.bs.collapse", () => { iconeResumo.textContent = "▾"; });
+          collapseResumo.addEventListener("hide.bs.collapse", () => { iconeResumo.textContent = "▸"; });
+        }
+      });
 
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
