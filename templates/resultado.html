@@ -219,7 +219,7 @@ th { white-space: nowrap; }
 }
 
 .chart-box{
-  height: 300px;           /* ajuste como quiser */
+  height: 280px;           /* ajuste como quiser */
 }
 
 .chart-box canvas{
@@ -686,6 +686,21 @@ th { white-space: nowrap; }
         .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
+    function ajustarAlturaChart(canvas, qtdBarras) {
+      const box = canvas.closest(".chart-box");
+      if (!box) return;
+
+      const BASE = 270;          // base mais baixa
+      const EXTRA_POR_BARRA = 10; // sobe menos por barra
+      const MIN = 250;           // mínimo menor
+      const MAX = 340;           // máximo menor
+
+      const novaAltura = Math.max(MIN, Math.min(MAX, BASE + (qtdBarras * EXTRA_POR_BARRA)));
+      box.style.height = `${novaAltura}px`;
+    }
+
+
+
     function getUnicos(col) {
       const set = new Set();
       dfJuntar.forEach(row => {
@@ -843,6 +858,8 @@ function getCategoriasPorAssessor(codAssessor) {
 
       const labels = topEntries.map(e => e[0]);
       const valores = topEntries.map(e => e[1]);
+      ajustarAlturaChart(canvas, labels.length);
+
 
       if (chartCategoria) chartCategoria.destroy();
 
@@ -859,10 +876,11 @@ function getCategoriasPorAssessor(codAssessor) {
             borderColor: "#c9ae03",
             borderWidth: 1.2,
             borderSkipped: false,
-            barThickness: 16,
-            maxBarThickness: 20,
-            categoryPercentage: 0.75,
-            barPercentage: 0.9
+            barThickness: "flex",     // deixa adaptar
+            maxBarThickness: 30,      // controla pra não ficar gigante
+            categoryPercentage: 0.9,
+            barPercentage: 0.95
+
 
           }]
         },
@@ -893,7 +911,10 @@ function getCategoriasPorAssessor(codAssessor) {
             },
             y: { grid: { display: false } }
           },
-          elements: { bar: { borderRadius: 3, barThickness: 14, maxBarThickness: 18 } }
+          elements: { bar: { borderRadius: 3 } }
+
+
+
         }
       });
     }
@@ -943,6 +964,8 @@ function getCategoriasPorAssessor(codAssessor) {
 
   const labels = topEntries.map(e => e[0]);
   const valores = topEntries.map(e => e[1]);
+  ajustarAlturaChart(canvas, labels.length);
+
 
   if (chartProduto) chartProduto.destroy();
 
@@ -959,10 +982,11 @@ function getCategoriasPorAssessor(codAssessor) {
         borderColor: "#c9ae03",
         borderWidth: 1.2,
         borderSkipped: false,
-        barThickness: 16,
-        maxBarThickness: 20,
-        categoryPercentage: 0.75,
+        barThickness: "flex",
+        maxBarThickness: 24,
+        categoryPercentage: 0.82,
         barPercentage: 0.9
+
 
       }]
     },
@@ -993,7 +1017,9 @@ function getCategoriasPorAssessor(codAssessor) {
         },
         y: { grid: { display: false } }
       },
-      elements: { bar: { borderRadius: 3, barThickness: 14, maxBarThickness: 18 } }
+      elements: { bar: { borderRadius: 3 } }
+
+
     }
   });
 }
