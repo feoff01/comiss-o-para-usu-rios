@@ -24,6 +24,171 @@ from supabase import create_client, Client
 from comissoes_backend import calcular_comissoes
 
 # =====================================================================
+# 0) MAPA: UNIQUE ID (URL) -> CÓDIGO A (ASSSESSOR)
+# =====================================================================
+
+# 🔑 URL vai ter o UNIQUE ID (ex: 1753886....)
+# 🔑 Dashboard precisa filtrar pelo "Código Assessor" (seu Código A)
+UID_TO_CODIGO_A = {
+    "1753886754886x857175940547577900": "Pietra",
+    "1753980803852x688080594032460800": "A40167",
+    "1753989826514x117679237413119700": "A58850",
+    "1753990212117x695374243095112800": "alessandro",
+    "1753990249313x998441172298350800": "A44551",
+    "1753990326997x766858359510979700": "A87769",
+    "1753990378378x471544342004163400": "A51307",
+    "1753990438712x945907818109711100": "A31767",
+    "1753990570053x160438727331202900": "A58287",
+    "1753990633311x103633112515576940": "A92626",
+    "1753990669710x259639824673666430": "A59364",
+    "1753990703441x326201354947306400": "A34346",
+    "1753990741803x742023854421760500": "A73027",
+    "1753990844330x943656950150988300": "A93113",
+    "1753990883199x472123494292006300": "A55166",
+    "1753990928310x593695268755554100": "daniel",
+    "1753990960379x851719350344574000": "A44506",
+    "1753991019390x864377981321023500": "diegop",
+    "1753991161124x710795601733627600": "A96316",
+    "1753991246366x889693050566062100": "A45287",
+    "1753991310924x648190125901059200": "A20875",
+    "1753991377223x116216010754506940": "A96927",
+    "1753991419447x788411778078631700": "A36167",
+    "1753991453683x944461181229447000": "A91633",
+    "1753991545851x477270342363054200": "A89559",
+    "1753991574532x172864049039204380": "A88326",
+    "1753991600417x810824017321567700": "A88686",
+    "1753991659609x909129904903361200": "A96786",
+    "1753991736202x251067074596834430": "A58055",
+    "1753991774606x100373977784706800": "A46993",
+    "1753991827009x508821421686630000": "A27246",
+    "1753991954225x483424803799998900": "Isabella",
+    "1753991987314x592165855402988900": "A30304",
+    "1753992114794x149925597180481150": "A46815",
+    "1753992154260x698315623490182800": "A45244",
+    "1753992329138x574507809195668160": "A66943",
+    "1753992371094x757846787999668900": "A87747",
+    "1753992403364x184097784606285900": "A38605",
+    "1753992452794x992301787146020700": "A42675",
+    "1753992494898x888018981462339300": "A97020",
+    "1754054297121x530440377685272000": "A53030",
+    "1754055278598x509268681821564600": "A94182",
+    "1754055319022x545313253273969100": "A26599",
+    "1754055351253x543272106866645060": "A97601",
+    "1754055388378x273058849686820930": "A61951",
+    "1754055437094x255887454773434660": "A59767",
+    "1754055482764x980421972897054200": "A47274",
+    "1754055542352x602419050940827400": "A95585",
+    "1754055575782x214224218753218850": "A90107",
+    "1754055652164x808025019573410000": "A48499",
+    "1754055695601x903484101640544600": "A22871",
+    "1754055747969x277461108593133320": "marketing",
+    "1754055885618x418041099334428540": "master",
+    "1754055995780x754258086862307200": "A72355",
+    "1754056154270x676743970204947800": "A46487",
+    "1754056191358x533923134260817700": "A40500",
+    "1754056437912x157643998467738460": "A23415",
+    "1754056523276x738086569372036000": "moara",
+    "1754056764856x152779132049324350": "A39437",
+    "1754056796606x511468762535995100": "A53909",
+    "1754056828991x457173060783150140": "A45784",
+    "1754056853578x591162081206915100": "A33966",
+    "1754056880886x126350714461613620": "A35722",
+    "1754056934272x710929586686530640": "A72229",
+    "1754056963046x415000842061648900": "A70108",
+    "1754057032847x633962101586745000": "A53764",
+    "1754057095530x834352009519085900": "A93953",
+    "1754057228799x555793377458217800": "A96279",
+    "1754057258841x383536749492202800": "A49050",
+    "1754057293545x352272657659205700": "A38774",
+    "1754057330962x735889967582899200": "A47310",
+    "1754057371401x655973938421176000": "A96970",
+    "1754057396766x916558032436847200": "A95495",
+    "1754057428708x808946918243715800": "A73953",
+    "1754057453053x958065807029329100": "A33845",
+    "1754057482796x911314421365704300": "A94395",
+    "1754057537392x546733110237769300": "A39688",
+    "1754057678456x123494774042346880": "A93984",
+    "1754057715623x214202941145667170": "A33987",
+    "1754057750936x104163648167817650": "A21653",
+    "1754057779633x886539150156983300": "A21426",
+    "1754057808458x806011428489011200": "A54626",
+    "1754057839714x202429187678363480": "Victor",
+    "1754057879824x876427146004087800": "A38361",
+    "1754057926328x977113444143973900": "A94183",
+    "1754058007766x362474605973843260": "A95462",
+    "1754058033420x422560950960555460": "A94633",
+    "1754058062231x262071607055972320": "A88206",
+    "1754058085950x788798074442263600": "A70243",
+    "1754058119389x428798747489083800": "A94298",
+    "1754059397777x160490502598061630": "A96407",
+    "1754059956085x714355976760145500": "A27067",
+    "1754060694022x943058833183341400": "A73290",
+    "1754061151222x139643852159255570": "Maycon",
+    "1754065011828x667666726591074100": "A46098",
+    "1754071263768x906598049491145000": "Marcelo",
+    "1754305226338x714124995760785500": "A50753",
+    "1755466883951x368550871144399900": "Alessandra Pitta",
+    "1756303210220x438226555294231940": "joao",
+    "1756304470179x672578434894486800": "A94396",
+    "1756739549788x986288014831395500": "Vitoria Alves",
+    "1756905755002x251326027393447900": "Taina",
+    "1757009998612x799685291787380000": "A96816",
+    "1757092852790x183863717729299870": "Weslley",
+    "1757334528757x428166502086587260": "A97546",
+    "1757360940436x773893439512481700": "A97086",
+    "1757534249466x505907864311123700": "fabioluiz",
+    "1757687049745x741789484730884600": "Angel",
+    "1757971076076x301349122090017700": "38774",
+    "1758136061777x937752591132023300": "A88171",
+    "1758286546483x743970551649554000": "Janaina",
+    "1758563676723x345180008168751040": "Beatriz",
+    "1758578578375x919379701985455200": "A59518",
+    "1758628414992x261391068831117860": "A98366",
+    "1758666268586x376227338129919940": "A98281",
+    "1758801425130x602790850303388800": "Robson",
+    "1758916570131x136575402598153600": "A48623",
+    "1759253645046x846754663281329400": "A47800",
+    "1759323505877x157804126569833570": "lucca",
+    "1760101485550x147388445066264580": "Adriane",
+    "1760104715667x623441264671875200": "A51791",
+    "1761669758370x486700506904290240": "minimaster",
+    "1761745201395x852295593846150500": "Fernando",
+    "1762260047501x419278451537887360": "Morteza",
+    "1762260141843x329307095579512300": "AndreFuji",
+    "1762338952296x956645044912204400": "Denilson",
+    "1762556087890x991823653632790900": "MAURICIO.A98541",
+    "1762886863793x587378305324006300": "Silas",
+    "1762948591421x954533110227978100": "ArthurCiurilli",
+    "1763388110172x426997792498987200": "FelipeMakhlouf",
+    "1763399603502x862824041921172400": "AlvaroRossetto",
+    "1763399753090x464267669404969200": "DanielePereira",
+    "1763399875540x709242636265947900": "MaryelenRosa",
+    "1763399985252x257752671283476580": "MarcoAurelio",
+    "1763729732405x818166565600834300": "HenriPierre",
+    "1764079397829x875931919793011000": "A50948",
+    "1764164500277x145949803583536030": "A23968",
+    "1764339812242x219802204460605820": "JessicaAparecida",
+    "1764682123827x191746769335502400": "PedroGabriel",
+    "1764855755019x112968577421757040": "LucasTeixeira",
+    "1764855979962x667253334747014000": "VictorHugo",
+    "1765204369678x501025667073309760": "HelderAugusto",
+    "1765290116136x172976986671730100": "ErikWolff",
+    "1765290555334x278259988777283870": "AnaLuisa",
+    "1765290756736x699742987060190300": "FernandaSercheli",
+    "1765545401782x973508885715708200": "Geovanna Vitoria",
+    "1765545680973x272148465773243140": "Stefanie Abdul",
+    "1765833462764x827976627312090800": "A68653",
+    "1765922325625x346469558823403700": "Lucas Francisco",
+    "1765969050182x532465595934963400": "Arthur Pinotti",
+}
+
+# Reverso (Código A -> unique id) pra gravar URL com unique id
+CODIGO_A_TO_UID = {v: k for k, v in UID_TO_CODIGO_A.items()}
+
+# placeholder que você já usa
+URL_PLACEHOLDER = "FeFePaFaHi"
+
+# =====================================================================
 # 1) CONFIGURAÇÃO BÁSICA DO FLASK
 # =====================================================================
 
@@ -169,16 +334,12 @@ def _supabase_list(path: str):
     if supabase is None:
         return []
     try:
-        # OBS: se seu bucket tiver MUITOS arquivos, aqui dá pra implementar paginação.
         return supabase.storage.from_(SUPABASE_BUCKET).list(path=path)
     except Exception as e:
         print("Erro listando no Supabase:", e)
         return []
 
 
-# -----------------------
-# LISTAGEM DE COMPETÊNCIAS
-# -----------------------
 def listar_competencias() -> list[str]:
     itens = _supabase_list("")
     comps = []
@@ -189,9 +350,6 @@ def listar_competencias() -> list[str]:
     return sorted(comps, reverse=True)
 
 
-# -----------------------
-# LISTAGEM DF_FINAL: aceita timestamp antigo e versão nova (vN)
-# -----------------------
 _RE_DF_FINAL_TS = re.compile(r"^df_final_(\d{8}_\d{6})\.xlsx$")
 _RE_DF_FINAL_V = re.compile(r"^df_final_v(\d+)\.xlsx$")
 
@@ -204,15 +362,14 @@ def listar_df_final_por_competencia(competencia: str) -> list[str]:
         if _RE_DF_FINAL_TS.match(nome) or _RE_DF_FINAL_V.match(nome):
             arquivos.append(f"{competencia}/{nome}")
 
-    # Ordena: primeiro por versão (maior vN), depois por timestamp (mais recente)
     def sort_key(path: str):
         base = path.split("/")[-1]
         mv = _RE_DF_FINAL_V.match(base)
         if mv:
-            return (2, int(mv.group(1)))  # tipo 2 = versão
+            return (2, int(mv.group(1)))
         mt = _RE_DF_FINAL_TS.match(base)
         if mt:
-            return (1, mt.group(1))       # tipo 1 = timestamp
+            return (1, mt.group(1))
         return (0, base)
 
     arquivos.sort(key=sort_key, reverse=True)
@@ -264,14 +421,7 @@ def supabase_upload_df_upsert(df: pd.DataFrame, path: str):
     )
 
 
-# -----------------------
-# PARSE: pega competência e "id" da versão (vN ou timestamp)
-# -----------------------
 def parse_comp_versionid_from_df_final_path(df_final_path: str) -> tuple[str | None, str | None]:
-    """
-    Retorna (competencia, version_id)
-    version_id pode ser: "v3" ou "20251216_173207"
-    """
     if not df_final_path or "/" not in df_final_path:
         return None, None
 
@@ -317,10 +467,6 @@ def montar_links_fontes_supabase(comp: str, version_id: str):
 
 
 def proxima_versao_da_competencia(comp: str) -> int:
-    """
-    Procura por df_final_vN.xlsx na pasta da competência e devolve N+1.
-    Se não existir nenhum, começa em 1.
-    """
     itens = _supabase_list(comp)
     max_v = 0
     for it in itens:
@@ -401,6 +547,11 @@ def montar_contexto_dashboard(
         competencias_disponiveis=competencias_disponiveis,
         competencia_atual=competencia_atual,
         arquivos_df_final=arquivos_df_final,
+
+        # 🔑 manda os mapas pro template
+        uid_to_codigo_a=UID_TO_CODIGO_A,
+        codigo_a_to_uid=CODIGO_A_TO_UID,
+        url_placeholder=URL_PLACEHOLDER,
     )
 
 # =====================================================================
@@ -500,18 +651,15 @@ def visualizar_antigo():
         flash("Supabase não está configurado. Não consigo listar/abrir arquivos.")
         return redirect(url_for("index"))
 
-    # Usuário escolhe APENAS a competência
     competencia = (request.args.get("competencia") or "").strip()
     file_path_param = (request.args.get("file") or "").strip()
 
-    # 1) Se veio competência válida, SEMPRE pega a versão mais recente
     if re.match(r"^\d{4}-\d{2}$", competencia):
         file_path = escolher_mais_recente_df_final(competencia)
         if not file_path:
             flash("Não encontrei df_final para essa competência no Supabase.")
             return redirect(url_for("index"))
 
-    # 2) Se NÃO veio competência, mas veio "file" (link antigo), ainda assim força a última versão daquela competência
     elif file_path_param:
         comp, _ = parse_comp_versionid_from_df_final_path(file_path_param)
         if not comp or not re.match(r"^\d{4}-\d{2}$", comp):
@@ -522,15 +670,12 @@ def visualizar_antigo():
         if not file_path:
             flash("Não encontrei df_final para essa competência no Supabase.")
             return redirect(url_for("index"))
-
-        # atualiza a variável competência (pra mostrar no topo certinho)
         competencia = comp
 
     else:
         flash("Selecione uma competência válida para visualizar.")
         return redirect(url_for("index"))
 
-    # Carrega df_final (sempre o mais recente)
     df_final = carregar_excel_do_supabase(file_path)
     if df_final is None:
         flash("Não consegui baixar/ler o Excel do Supabase.")
@@ -586,7 +731,6 @@ def visualizar_antigo():
 
     contexto["max_total"] = contexto.pop("max_total_val")
     return render_template("resultado.html", **contexto)
-
 
 
 @app.route("/processar", methods=["POST"])
@@ -656,9 +800,6 @@ def processar():
 
     if supabase is not None:
         try:
-            # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            # NOVO: versionamento por mês: v1, v2, v3...
-            # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             prox = proxima_versao_da_competencia(prefixo_competencia)
             version_id = f"v{prox}"
 
